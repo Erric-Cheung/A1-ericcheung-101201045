@@ -3,6 +3,7 @@ package org.example;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -11,6 +12,9 @@ public class Main {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializePlayers();
+
+        Scanner input = new Scanner(System.in);
+        PrintWriter output = new PrintWriter(System.out);
     }
 
     // Decks
@@ -60,6 +64,14 @@ public class Main {
 
         public void addShield(int i) {
             shields = shields + i;
+        }
+
+        public int getShields(){
+            return shields;
+        }
+
+        public String getPlayerName(){
+            return playerName;
         }
     }
 
@@ -148,18 +160,22 @@ public class Main {
         return false;
     }
 
-    public void endGame(){
+    public ArrayList<String> getWinningPlayersId(){
+        ArrayList<String> winningPlayers = new ArrayList<>();
+        for(Player player : playerList){
+            if(player.getShields() >= 7){
+                winningPlayers.add(player.getPlayerName());
+            }
 
+        }
+        return winningPlayers;
     }
-
-    public void getWinningPlayersId(){
-
-    }
-
 
     // Interface
     public void winnersPrompt(PrintWriter output){
-
+        ArrayList<String> winnersList = getWinningPlayersId();
+        String winners = String.join(", ", winnersList);
+        output.println("WINNERS: " + winners);
     }
 
 
