@@ -3,6 +3,8 @@ package org.example;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -130,6 +132,24 @@ class MainTest {
         // test 1 - should determine there is a winner
         boolean hasWinner = game.checkForWinningPlayers();
         assertTrue(hasWinner);
+    }
+
+    @Test
+    @DisplayName("Game displays id of each winner")
+    void RESP_04_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        game.player1.addShield(7);
+        game.player3.addShield(7);
+
+        StringWriter output = new StringWriter();
+
+        // test 1 - should display ids of each winner
+
+        game.winnersPrompt(new PrintWriter(output));
+        assertTrue(output.toString().contains("P1") && output.toString().contains("P3"));
     }
 
 }

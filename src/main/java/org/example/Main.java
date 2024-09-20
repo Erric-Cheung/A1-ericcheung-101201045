@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -146,4 +147,20 @@ public class Main {
         }
         return false;
     }
+
+    public void endGame(){
+
+    }
+
+    public void getWinningPlayersId(){
+
+    }
+
+
+    // Interface
+    public void winnersPrompt(PrintWriter output){
+
+    }
+
+
 }
