@@ -8,4 +8,33 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
 
     }
+
+    class Card{
+        int value;
+        String deckType;
+        String type;
+        String name;
+    }
+
+    public Card drawCard(){
+        return null;
+    }
+
+    public void initializeAdventureDeck(){
+
+    }
+
+    public int getAdventureDeckSize(){
+        return 0;
+    }
+
+    public void initializeEventDeck(){
+
+    }
+
+    public int getEventDeckSize(){
+        return 0;
+    }
+
+
 }
