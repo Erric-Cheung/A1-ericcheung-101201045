@@ -29,7 +29,7 @@ class MainTest {
         }
 
         for (int i = 0; i < deckSize; i++) {
-            Main.Card newCard = game.drawCard();
+            Main.Card newCard = game.drawAdventureCard();
 
             if (cardCountMap.containsKey(newCard.name)) {
                 cardCountMap.put(newCard.name, cardCountMap.get(newCard.name) + 1);
@@ -73,7 +73,7 @@ class MainTest {
         }
 
         for (int i = 0; i < deckSize; i++) {
-            Main.Card newCard = game.drawCard();
+            Main.Card newCard = game.drawEventCard();
 
             if (cardCountMap.containsKey(newCard.name)) {
                 cardCountMap.put(newCard.name, cardCountMap.get(newCard.name) + 1);
@@ -85,7 +85,7 @@ class MainTest {
                         (cardCountMap.get("Q3") == 4) &&
                         (cardCountMap.get("Q4") == 3) &&
                         (cardCountMap.get("Q5") == 2) &&
-                        (cardCountMap.get("Plaque") == 1) &&
+                        (cardCountMap.get("Plague") == 1) &&
                         (cardCountMap.get("Queen's favor") == 2) &&
                         (cardCountMap.get("Prosperity") == 2)
 
