@@ -118,4 +118,18 @@ class MainTest {
         assertEquals(52, game.getAdventureDeckSize());
     }
 
+    @Test
+    @DisplayName("Test if players have 7 shields.")
+    void RESP_03_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+        game.player1.addShield(7);
+        game.player2.addShield(7);
+
+        // test 1 - should determine there is a winner
+        boolean hasWinner = game.checkForWinningPlayers();
+        assertTrue(hasWinner);
+    }
+
 }

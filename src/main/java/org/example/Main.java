@@ -39,9 +39,11 @@ public class Main {
     public static class Player {
         String playerName;
         ArrayList<Card> adventureHand;
+        int shields;
 
         public Player(String name){
             this.playerName = name;
+            shields = 0;
             adventureHand = new ArrayList<>();
         }
 
@@ -51,6 +53,10 @@ public class Main {
 
         public int getPlayerAdventureHandSize() {
             return adventureHand.size();
+        }
+
+        public void addShield(int i){
+
         }
     }
 
@@ -125,4 +131,7 @@ public class Main {
         }
     }
 
+    public boolean checkForWinningPlayers(){
+        return false;
+    }
 }
