@@ -7,7 +7,9 @@ import java.util.Collections;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
     }
 
     // Decks
@@ -15,10 +17,10 @@ public class Main {
     ArrayList<Card> adventureDeck = new ArrayList<>();
 
     // Players
-    Player player1 = new Player();
-    Player player2 = new Player();
-    Player player3 = new Player();
-    Player player4 = new Player();
+    Player player1 = new Player("P1");
+    Player player2 = new Player("P2");
+    Player player3 = new Player("P3");
+    Player player4 = new Player("P4");
 
     public static class Card {
         String name;
@@ -35,8 +37,20 @@ public class Main {
     }
 
     public static class Player {
+        String playerName;
+        ArrayList<Card> adventureHand;
+
+        public Player(String name){
+            this.playerName = name;
+            adventureHand = new ArrayList<>();
+        }
+
+        public void addAdventureCard(Card card){
+            adventureHand.add(card);
+        }
+
         public int getPlayerAdventureHandSize() {
-            return 0;
+            return adventureHand.size();
         }
     }
 
@@ -73,6 +87,8 @@ public class Main {
         for (int i = 0; i < 8; i++) adventureDeck.add(new Card("B15", 15, "Weapon", null));
         for (int i = 0; i < 6; i++) adventureDeck.add(new Card("L20", 20, "Weapon", null));
         for (int i = 0; i < 2; i++) adventureDeck.add(new Card("E30", 30, "Weapon", null));
+
+        Collections.shuffle(adventureDeck);
     }
 
     public int getAdventureDeckSize() {
@@ -101,7 +117,12 @@ public class Main {
     }
 
     public void initializePlayers(){
-
+        for(int i = 0; i < 12; i++){
+            player1.addAdventureCard(drawAdventureCard());
+            player2.addAdventureCard(drawAdventureCard());
+            player3.addAdventureCard(drawAdventureCard());
+            player4.addAdventureCard(drawAdventureCard());
+        }
     }
 
 }
