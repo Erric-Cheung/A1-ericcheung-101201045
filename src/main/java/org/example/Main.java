@@ -21,6 +21,8 @@ public class Main {
     Player player2 = new Player("P2");
     Player player3 = new Player("P3");
     Player player4 = new Player("P4");
+    ArrayList<Player> playerList = new ArrayList<>();
+
 
     public static class Card {
         String name;
@@ -41,13 +43,13 @@ public class Main {
         ArrayList<Card> adventureHand;
         int shields;
 
-        public Player(String name){
+        public Player(String name) {
             this.playerName = name;
             shields = 0;
             adventureHand = new ArrayList<>();
         }
 
-        public void addAdventureCard(Card card){
+        public void addAdventureCard(Card card) {
             adventureHand.add(card);
         }
 
@@ -55,8 +57,8 @@ public class Main {
             return adventureHand.size();
         }
 
-        public void addShield(int i){
-
+        public void addShield(int i) {
+            shields = shields + i;
         }
     }
 
@@ -122,8 +124,13 @@ public class Main {
         return eventDeck.size();
     }
 
-    public void initializePlayers(){
-        for(int i = 0; i < 12; i++){
+    public void initializePlayers() {
+        playerList.add(player1);
+        playerList.add(player2);
+        playerList.add(player3);
+        playerList.add(player4);
+
+        for (int i = 0; i < 12; i++) {
             player1.addAdventureCard(drawAdventureCard());
             player2.addAdventureCard(drawAdventureCard());
             player3.addAdventureCard(drawAdventureCard());
@@ -131,7 +138,12 @@ public class Main {
         }
     }
 
-    public boolean checkForWinningPlayers(){
+    public boolean checkForWinningPlayers() {
+        for (Player player : playerList) {
+            if (player.shields >= 7) {
+                return true;
+            }
+        }
         return false;
     }
 }
