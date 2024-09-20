@@ -7,11 +7,18 @@ import java.util.Collections;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
+
     }
+
+    // Decks
     ArrayList<Card> eventDeck = new ArrayList<>();
     ArrayList<Card> adventureDeck = new ArrayList<>();
+
+    // Players
+    Player player1 = new Player();
+    Player player2 = new Player();
+    Player player3 = new Player();
+    Player player4 = new Player();
 
     public static class Card {
         String name;
@@ -24,6 +31,12 @@ public class Main {
             this.value = value;
             this.type = type;
             this.effect = effect;
+        }
+    }
+
+    public static class Player {
+        public int getPlayerAdventureHandSize() {
+            return 0;
         }
     }
 
@@ -87,5 +100,8 @@ public class Main {
         return eventDeck.size();
     }
 
+    public void initializePlayers(){
+
+    }
 
 }

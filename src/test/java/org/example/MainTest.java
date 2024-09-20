@@ -63,7 +63,7 @@ class MainTest {
         game.initializeEventDeck();
         int deckSize = game.getEventDeckSize();
 
-        // test 2 -
+        // test 2 - event deck should have correct number of event cards
 
         String[] cardNames = {"Q2", "Q3", "Q4", "Q5", "Plague", "Queen's favor", "Prosperity"};
         Map<String, Integer> cardCountMap = new HashMap<>();
@@ -91,4 +91,31 @@ class MainTest {
 
         );
     }
+
+    @Test
+    @DisplayName("Check if each player has 12 adventure cards")
+    void RESP_02_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        // test 1 - each player should have 12 cards
+
+        assertTrue(game.player1.getPlayerAdventureHandSize() == 12 &&
+                game.player2.getPlayerAdventureHandSize() == 12 &&
+                game.player3.getPlayerAdventureHandSize() == 12 &&
+                game.player4.getPlayerAdventureHandSize() == 12);
+    }
+
+    @Test
+    @DisplayName("Check if each deck is updated after distribution")
+    void RESP_02_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        // test 2 - deck should have 52 cards after distributing to 4 players
+        assertEquals(52, game.getAdventureDeckSize());
+    }
+
 }
