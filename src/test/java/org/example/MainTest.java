@@ -203,13 +203,13 @@ class MainTest {
         Main.Card card6 = new Main.Card("S10", 10, "Weapon", null);
 
         player.adventureHand = new ArrayList<>();
-        player.adventureHand.add(card1);
-        player.adventureHand.add(card2);
-        player.adventureHand.add(card3);
-        player.adventureHand.add(card4);
-        player.adventureHand.add(card5);
-        player.adventureHand.add(card6);
-        player.adventureHand.add(card7);
+        player.addAdventureCard(card1);
+        player.addAdventureCard(card2);
+        player.addAdventureCard(card3);
+        player.addAdventureCard(card4);
+        player.addAdventureCard(card5);
+        player.addAdventureCard(card6);
+        player.addAdventureCard(card7);
 
         // test 2 - displays hand in correct order
         game.displayCurrentPlayer(new PrintWriter(output));
