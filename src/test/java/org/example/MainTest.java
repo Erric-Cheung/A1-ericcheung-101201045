@@ -166,4 +166,57 @@ class MainTest {
 
         assertEquals("P2", game.getCurrentPlayer().getPlayerName());
     }
+
+    @Test
+    @DisplayName("Game displays current player name")
+    void RESP_06_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        StringWriter output = new StringWriter();
+
+        // test 1 - displays current player
+        game.nextPlayer();
+        game.displayCurrentPlayer(new PrintWriter(output));
+        System.out.println(output);
+        assertTrue(output.toString().contains("CURRENT PLAYER: P2"));
+    }
+
+    @Test
+    @DisplayName("Game displays current player's hand and is sorted")
+    void RESP_06_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        StringWriter output = new StringWriter();
+
+        // Rig deck
+        Main.Player player = game.getCurrentPlayer();
+        Main.Card card1 = new Main.Card("F10", 10, "Foe", null);
+        Main.Card card7 = new Main.Card("D5", 5, "Weapon", null);
+        Main.Card card2 = new Main.Card("F5", 5, "Foe", null);
+        Main.Card card3 = new Main.Card("F70", 70, "Foe", null);
+        Main.Card card4 = new Main.Card("L20", 20, "Weapon", null);
+        Main.Card card5 = new Main.Card("H10", 10, "Weapon", null);
+        Main.Card card6 = new Main.Card("S10", 10, "Weapon", null);
+
+        player.adventureHand = new ArrayList<>();
+        player.adventureHand.add(card1);
+        player.adventureHand.add(card2);
+        player.adventureHand.add(card3);
+        player.adventureHand.add(card4);
+        player.adventureHand.add(card5);
+        player.adventureHand.add(card6);
+        player.adventureHand.add(card7);
+
+        // test 2 - displays hand in correct order
+        game.displayCurrentPlayer(new PrintWriter(output));
+        System.out.println(output);
+        assertTrue(output.toString().contains("F5 F10 F70 D5 S10 H10 L20"));
+    }
+
+
 }
+

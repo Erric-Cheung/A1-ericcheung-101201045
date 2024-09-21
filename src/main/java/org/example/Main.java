@@ -3,6 +3,7 @@ package org.example;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -68,11 +69,11 @@ public class Main {
             shields = shields + i;
         }
 
-        public int getShields(){
+        public int getShields() {
             return shields;
         }
 
-        public String getPlayerName(){
+        public String getPlayerName() {
             return playerName;
         }
     }
@@ -162,10 +163,10 @@ public class Main {
         return false;
     }
 
-    public ArrayList<String> getWinningPlayersId(){
+    public ArrayList<String> getWinningPlayersId() {
         ArrayList<String> winningPlayers = new ArrayList<>();
-        for(Player player : playerList){
-            if(player.getShields() >= 7){
+        for (Player player : playerList) {
+            if (player.getShields() >= 7) {
                 winningPlayers.add(player.getPlayerName());
             }
 
@@ -173,23 +174,27 @@ public class Main {
         return winningPlayers;
     }
 
-    public void startPlayerTurn(){
+    public void startPlayerTurn() {
 
     }
 
-    public void nextPlayer(){
+    public void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % 4;
     }
 
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return playerList.get(currentPlayerIndex);
     }
 
     // Interface
-    public void winnersPrompt(PrintWriter output){
+    public void winnersPrompt(PrintWriter output) {
         ArrayList<String> winnersList = getWinningPlayersId();
         String winners = String.join(", ", winnersList);
         output.println("WINNERS: " + winners);
+    }
+
+    public void displayCurrentPlayer(PrintWriter output) {
+
     }
 
 
