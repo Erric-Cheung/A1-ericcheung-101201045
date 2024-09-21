@@ -152,4 +152,18 @@ class MainTest {
         assertTrue(output.toString().contains("P1") && output.toString().contains("P3"));
     }
 
+    @Test
+    @DisplayName("Correct turn order")
+    void RESP_05_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        // test 1 - after 5 turns, current player should be player 2
+        for (int i = 0; i < 5; i++) {
+            game.nextPlayer();
+        }
+
+        assertEquals("P2", game.getCurrentPlayer().getPlayerName());
+    }
 }
