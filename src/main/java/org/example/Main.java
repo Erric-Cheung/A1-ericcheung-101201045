@@ -59,6 +59,7 @@ public class Main {
 
         public void addAdventureCard(Card card) {
             adventureHand.add(card);
+            adventureHand.sort(new CardComparator());
         }
 
         public int getPlayerAdventureHandSize() {
@@ -75,6 +76,43 @@ public class Main {
 
         public String getPlayerName() {
             return playerName;
+        }
+    }
+
+    public static class CardComparator implements Comparator<Card> {
+        @Override
+        public int compare(Card c1, Card c2) {
+            // Foes come before weapons
+            if (c1.type.equals("Foe") && c2.type.equals("Weapon")) {
+                return -1; // c1 (foe) is less than c2 (weapon)
+            }
+            if (c1.type.equals("Weapon") && c2.type.equals("Foe")) {
+                return 1;  // c2 (foe) is less than c1 (weapon)
+            }
+
+            // If both are foes, sort by strength
+            if (c1.type.equals("Foe") && c2.type.equals("Foe")) {
+                if (c1.value != c2.value) {
+                    return Integer.compare(c1.value, c2.value);
+                }
+            }
+
+            // If both are weapons, sort swords before horses, then by strength
+            if (c1.type.equals("Weapon") && c2.type.equals("Weapon")) {
+                // Swords before horses
+                if (c1.name.equals("S10") && c2.name.equals("H10")) {
+                    return -1;
+                }
+                if (c1.name.equals("H10") && c2.name.equals("S10")) {
+                    return 1;
+                }
+
+                // If both are the same type of weapon, sort by strength
+                return Integer.compare(c1.value, c2.value);
+            }
+
+            // If types and other criteria are equal, return 0
+            return 0;
         }
     }
 
@@ -174,10 +212,6 @@ public class Main {
         return winningPlayers;
     }
 
-    public void startPlayerTurn() {
-
-    }
-
     public void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % 4;
     }
@@ -194,8 +228,13 @@ public class Main {
     }
 
     public void displayCurrentPlayer(PrintWriter output) {
-
+        Player player = getCurrentPlayer();
+        ArrayList<Card> hand = player.adventureHand;
+        output.println("CURRENT PLAYER: " + player.playerName);
+        output.print("HAND: ");
+        for (Card card : hand) {
+            output.print(card.name + " ");
+        }
     }
-
 
 }
