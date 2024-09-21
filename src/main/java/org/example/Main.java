@@ -30,7 +30,6 @@ public class Main {
 
     // Game
     int currentPlayerIndex = 0;
-    Player currentPlayer;
 
     public static class Card {
         String name;
@@ -69,11 +68,11 @@ public class Main {
             shields = shields + i;
         }
 
-        public int getShields() {
+        public int getShields(){
             return shields;
         }
 
-        public String getPlayerName() {
+        public String getPlayerName(){
             return playerName;
         }
     }
@@ -163,10 +162,10 @@ public class Main {
         return false;
     }
 
-    public ArrayList<String> getWinningPlayersId() {
+    public ArrayList<String> getWinningPlayersId(){
         ArrayList<String> winningPlayers = new ArrayList<>();
-        for (Player player : playerList) {
-            if (player.getShields() >= 7) {
+        for(Player player : playerList){
+            if(player.getShields() >= 7){
                 winningPlayers.add(player.getPlayerName());
             }
 
@@ -174,20 +173,20 @@ public class Main {
         return winningPlayers;
     }
 
-    public void startPlayerTurn() {
+    public void startPlayerTurn(){
 
     }
 
-    public void nextPlayer() {
-
+    public void nextPlayer(){
+        currentPlayerIndex = (currentPlayerIndex + 1) % 4;
     }
 
-    public Player getCurrentPlayer() {
-        return player1;
+    public Player getCurrentPlayer(){
+        return playerList.get(currentPlayerIndex);
     }
 
     // Interface
-    public void winnersPrompt(PrintWriter output) {
+    public void winnersPrompt(PrintWriter output){
         ArrayList<String> winnersList = getWinningPlayersId();
         String winners = String.join(", ", winnersList);
         output.println("WINNERS: " + winners);
