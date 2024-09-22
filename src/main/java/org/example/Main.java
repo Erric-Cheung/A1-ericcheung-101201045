@@ -230,6 +230,7 @@ public class Main {
     public void startPlayerTurn() {
         Player currentPlayer = getCurrentPlayer();
         Card drawnEventCard = drawEventCard();
+        currentEventCard = drawnEventCard;
 
         if (Objects.equals(drawnEventCard.name, "Plague")) {
             currentPlayer.removeShields(2);
@@ -268,9 +269,11 @@ public class Main {
     }
 
     public void displayEventCard(PrintWriter output){
+        String effect = currentEventCard.effect;
+        String cardName = currentEventCard.name;
 
-
+        output.println("DRAWN CARD: " + cardName + ", " + effect);
     }
-    // Helper
 
+    // Helper
 }

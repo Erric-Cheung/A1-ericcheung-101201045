@@ -278,7 +278,7 @@ class MainTest {
         game.initializeAdventureDeck();
         game.initializePlayers();
 
-        // test 1 - should show event name and effect
+        // test 1 - should show event card name and effect
 
         StringWriter output = new StringWriter();
 
@@ -290,6 +290,10 @@ class MainTest {
                 output.toString().contains("Lose 2 shields immediately"));
     }
 
+    @Test
+    @DisplayName("")
+    void RESP_09_test_01() {
 
+    }
 }
 
