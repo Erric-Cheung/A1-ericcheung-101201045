@@ -179,7 +179,6 @@ class MainTest {
         // test 1 - displays current player
         game.nextPlayer();
         game.displayCurrentPlayer(new PrintWriter(output));
-        System.out.println(output);
         assertTrue(output.toString().contains("CURRENT PLAYER: P2"));
     }
 
@@ -213,10 +212,63 @@ class MainTest {
 
         // test 2 - displays hand in correct order
         game.displayCurrentPlayer(new PrintWriter(output));
-        System.out.println(output);
         assertTrue(output.toString().contains("F5 F10 F70 D5 S10 H10 L20"));
     }
 
+    @Test
+    @DisplayName("Event card 'Plague' is drawn and effect is correct working")
+    void RESP_07_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
 
+        // test 1 - player loses two shields after drawing event card
+        Main.Player player = game.getCurrentPlayer();
+        player.addShield(3);
+
+        game.eventDeck.addFirst(new Main.Card("Plague", 0, "Event", "Lose 2 shields immediately"));
+        game.startPlayerTurn();
+
+        assertEquals(1, player.getShields());
+    }
+
+    @Test
+    @DisplayName("Event card 'Queen's favor' is drawn and effect is correct working")
+    void RESP_07_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+
+        // test 2 - player gains two adventure cards after drawing event card
+        Main.Player player = game.getCurrentPlayer();
+        player.setAdventureHand(new ArrayList<>());
+
+        game.eventDeck.addFirst(new Main.Card("Queen's favor", 0, "Event", "Draw 2 adventure cards"));
+        game.startPlayerTurn();
+
+        assertEquals(2, player.getPlayerAdventureHandSize());
+    }
+
+    @Test
+    @DisplayName("Event card 'Prosperity' is drawn and effect is correct working")
+    void RESP_07_test_03() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        // test 2 - all players gains two adventure cards after drawing event card
+        for (Main.Player player : game.playerList) {
+            player.setAdventureHand(new ArrayList<>());
+        }
+
+        game.eventDeck.addFirst(new Main.Card("Prosperity", 0, "Event", "All players draw 2 adventure cards"));
+        game.startPlayerTurn();
+
+        assertTrue(game.player1.getPlayerAdventureHandSize() == 2 &&
+                game.player2.getPlayerAdventureHandSize() == 2 &&
+                game.player3.getPlayerAdventureHandSize() == 2 &&
+                game.player4.getPlayerAdventureHandSize() == 2);
+    }
 }
 

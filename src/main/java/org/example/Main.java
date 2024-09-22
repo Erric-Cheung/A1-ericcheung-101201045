@@ -22,6 +22,7 @@ public class Main {
     ArrayList<Card> eventDeck = new ArrayList<>();
     ArrayList<Card> adventureDeck = new ArrayList<>();
 
+
     // Players
     Player player1 = new Player("P1");
     Player player2 = new Player("P2");
@@ -60,6 +61,10 @@ public class Main {
         public void addAdventureCard(Card card) {
             adventureHand.add(card);
             adventureHand.sort(new CardComparator());
+        }
+
+        public void setAdventureHand(ArrayList<Card> hand){
+
         }
 
         public int getPlayerAdventureHandSize() {
@@ -220,6 +225,10 @@ public class Main {
         return playerList.get(currentPlayerIndex);
     }
 
+    public void startPlayerTurn() {
+
+    }
+
     // Interface
     public void winnersPrompt(PrintWriter output) {
         ArrayList<String> winnersList = getWinningPlayersId();
@@ -236,5 +245,7 @@ public class Main {
             output.print(card.name + " ");
         }
     }
+
+    // Helper
 
 }
