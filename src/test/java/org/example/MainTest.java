@@ -270,5 +270,26 @@ class MainTest {
                 game.player3.getPlayerAdventureHandSize() == 2 &&
                 game.player4.getPlayerAdventureHandSize() == 2);
     }
+
+    @Test
+    @DisplayName("Drawn event card is displayed properly")
+    void RESP_08_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        // test 1 - should show event name and effect
+
+        StringWriter output = new StringWriter();
+
+        game.eventDeck.addFirst(new Main.Card("Plague", 0, "Event", "Lose 2 shields immediately"));
+        game.startPlayerTurn();
+        game.displayEventCard(new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Plague") &&
+                output.toString().contains("Lose 2 shields immediately"));
+    }
+
+
 }
 

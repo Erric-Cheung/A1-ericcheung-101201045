@@ -29,6 +29,7 @@ public class Main {
 
     // Game
     int currentPlayerIndex = 0;
+    Card currentEventCard;
 
     public static class Card {
         String name;
@@ -266,6 +267,10 @@ public class Main {
         }
     }
 
+    public void displayEventCard(PrintWriter output){
+
+
+    }
     // Helper
 
 }
