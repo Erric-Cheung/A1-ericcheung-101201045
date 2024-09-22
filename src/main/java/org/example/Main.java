@@ -1,10 +1,7 @@
 package org.example;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -63,8 +60,8 @@ public class Main {
             adventureHand.sort(new CardComparator());
         }
 
-        public void setAdventureHand(ArrayList<Card> hand){
-
+        public void setAdventureHand(ArrayList<Card> hand) {
+            adventureHand = hand;
         }
 
         public int getPlayerAdventureHandSize() {
@@ -73,6 +70,10 @@ public class Main {
 
         public void addShield(int i) {
             shields = shields + i;
+        }
+
+        public void removeShields(int i) {
+            shields = shields - i;
         }
 
         public int getShields() {
@@ -226,7 +227,26 @@ public class Main {
     }
 
     public void startPlayerTurn() {
+        Player currentPlayer = getCurrentPlayer();
+        Card drawnEventCard = drawEventCard();
 
+        if (Objects.equals(drawnEventCard.name, "Plague")) {
+            currentPlayer.removeShields(2);
+        }
+        if (Objects.equals(drawnEventCard.name, "Queen's favor")) {
+            for (int i = 0; i < 2; i++) {
+                Card drawnAdventureCard = drawAdventureCard();
+                currentPlayer.addAdventureCard(drawnAdventureCard);
+            }
+        }
+        if (Objects.equals(drawnEventCard.name, "Prosperity")) {
+            for (Player player : playerList) {
+                for (int i = 0; i < 2; i++) {
+                    Card drawnAdventureCard = drawAdventureCard();
+                    player.addAdventureCard(drawnAdventureCard);
+                }
+            }
+        }
     }
 
     // Interface
