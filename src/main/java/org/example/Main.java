@@ -283,7 +283,6 @@ public class Main {
     }
 
     public void displayAdventureHand() {
-
     }
 
     public void promptFinishTurn(Scanner input, PrintWriter output) {
@@ -297,7 +296,26 @@ public class Main {
     }
 
     public void promptTrimHand(Scanner input, PrintWriter output) {
+        Player player = getCurrentPlayer();
 
+        while (player.getPlayerAdventureHandSize() > 12) {
+            output.println("Please select a card to discard from your hand:");
+            for (int i = 0; i < player.getPlayerAdventureHandSize(); i++) {
+                output.print(i + "." + player.adventureHand.get(i).name + "   ");
+            }
+            output.flush();
+            output.println();
+
+            int index = Integer.parseInt(input.nextLine());
+            player.removeAdventureCard(index);
+
+            output.println("Updated Hand:");
+            for (int i = 0; i < player.getPlayerAdventureHandSize(); i++) {
+                output.print(i + "." + player.adventureHand.get(i).name + "   ");
+            }
+            output.flush();
+            output.println();
+        }
     }
 
     // Helper
