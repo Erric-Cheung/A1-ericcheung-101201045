@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -291,9 +292,23 @@ class MainTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Display is cleared after player presses return key")
     void RESP_09_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
 
+        StringWriter output = new StringWriter();
+        String input = "\n";
+
+        game.displayCurrentPlayer(new PrintWriter(output));
+        game.promptFinishTurn(new Scanner(input), new PrintWriter(output));
+
+        // System.out.println(output);
+
+        assertTrue(output.toString().contains("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n"));
     }
+
+
 }
 

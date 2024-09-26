@@ -13,6 +13,9 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
         PrintWriter output = new PrintWriter(System.out);
+
+        game.displayCurrentPlayer(output);
+        game.promptFinishTurn(input, output);
     }
 
     // Decks
@@ -59,6 +62,10 @@ public class Main {
         public void addAdventureCard(Card card) {
             adventureHand.add(card);
             adventureHand.sort(new CardComparator());
+        }
+
+        public void removeAdventureCard(int i) {
+            adventureHand.remove(i);
         }
 
         public void setAdventureHand(ArrayList<Card> hand) {
@@ -268,12 +275,22 @@ public class Main {
         }
     }
 
-    public void displayEventCard(PrintWriter output){
+    public void displayEventCard(PrintWriter output) {
         String effect = currentEventCard.effect;
         String cardName = currentEventCard.name;
 
         output.println("DRAWN CARD: " + cardName + ", " + effect);
     }
+
+    public void displayAdventureHand() {
+
+    }
+
+    public void promptFinishTurn(Scanner input, PrintWriter output) {
+
+    }
+
+
 
     // Helper
 }
