@@ -296,7 +296,9 @@ public class Main {
         output.flush();
     }
 
+    public void promptTrimHand(Scanner input, PrintWriter output) {
 
+    }
 
     // Helper
 }

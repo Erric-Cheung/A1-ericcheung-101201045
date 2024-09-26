@@ -309,6 +309,25 @@ class MainTest {
         assertTrue(output.toString().contains("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n"));
     }
 
+    @Test
+    @DisplayName("Trim player's adventure hand to 12 cards")
+    void RESP_10_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
 
+        Main.Player player = game.getCurrentPlayer();
+        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+
+        // test - Should trim card the first and last position of hand
+
+        StringWriter output = new StringWriter();
+        String input = "0\n12";
+
+        game.promptTrimHand(new Scanner(input), new PrintWriter(output));
+
+        assertEquals(12, player.getPlayerAdventureHandSize());
+    }
 }
 
