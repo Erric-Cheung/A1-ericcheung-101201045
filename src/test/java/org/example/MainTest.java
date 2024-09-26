@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -310,13 +307,15 @@ class MainTest {
     }
 
     @Test
-    @DisplayName("Trim player's adventure hand to 12 cards")
+    @DisplayName("Test player has 12 cards after trimming")
     void RESP_10_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializePlayers();
 
         Main.Player player = game.getCurrentPlayer();
+
+        // 14 cards in current player's hand
         player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
         player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
 
@@ -328,6 +327,53 @@ class MainTest {
         game.promptTrimHand(new Scanner(input), new PrintWriter(output));
 
         assertEquals(12, player.getPlayerAdventureHandSize());
+    }
+
+    @Test
+    @DisplayName("Test the correct card is removed from the deck")
+    void RESP_10_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        Main.Player player = game.getCurrentPlayer();
+
+        // 14 cards in current player's hand
+        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+
+        // test - first and last card with names TEST_CARD should be trimmed from deck
+        game.overwriteAdventureHand(player, 0, new Main.Card("TEST_CARD", 5, "Foe", null));
+        game.overwriteAdventureHand(player, 13, new Main.Card("TEST_CARD", 5, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "13\n0";
+
+        game.promptTrimHand(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(!Objects.equals(player.adventureHand.getLast().name, "TEST_CARD") && !Objects.equals(player.adventureHand.getFirst().name, "TEST_CARD"));
+    }
+
+    @Test
+    @DisplayName("Test player is prompted to trim cards after exceeding 12")
+    void RESP_10_test_03() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        Main.Player player = game.getCurrentPlayer();
+
+        // 14 cards in current player's hand
+        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "13\n0";
+
+        game.promptTrimHand(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Please select a card to discard from your hand:"));
+
     }
 }
 

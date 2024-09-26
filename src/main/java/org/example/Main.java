@@ -301,4 +301,9 @@ public class Main {
     }
 
     // Helper
+
+    public void overwriteAdventureHand(Player player, int index, Card card){
+        player.adventureHand.remove(index);
+        player.adventureHand.add(index, card);
+    }
 }
