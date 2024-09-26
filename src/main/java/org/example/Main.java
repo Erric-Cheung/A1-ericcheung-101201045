@@ -287,7 +287,13 @@ public class Main {
     }
 
     public void promptFinishTurn(Scanner input, PrintWriter output) {
+        output.println("");
+        output.println("Press <return> key to your finish turn and clear display.");
+        output.flush();
 
+        input.nextLine();
+        output.print("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
+        output.flush();
     }
 
 
