@@ -318,6 +318,11 @@ public class Main {
         }
     }
 
+    public void promptSponsorQuest(Scanner input, PrintWriter output){
+
+    }
+
+
     // Helper
 
     public void overwriteAdventureHand(Player player, int index, Card card){

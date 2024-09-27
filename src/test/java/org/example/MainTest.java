@@ -375,5 +375,51 @@ class MainTest {
         assertTrue(output.toString().contains("Please select a card to discard from your hand:"));
 
     }
+
+    @Test
+    @DisplayName("Only current player is prompted to sponsor quest")
+    void RESP_11_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+
+        Main.Player player = game.getCurrentPlayer();
+        String currentPlayerName = player.playerName;
+
+        game.nextPlayer();
+        game.eventDeck.addFirst(new Main.Card("Q4", 4, "Quest", null));
+        game.startPlayerTurn();
+
+        StringWriter output = new StringWriter();
+        String input = "Y";
+
+        game.promptSponsorQuest(new Scanner(input), new PrintWriter(output));
+        assertTrue(output.toString().contains(currentPlayerName + ", enter Y to sponsor the quest"));
+    }
+
+    @Test
+    @DisplayName("All players are prompted to sponsor quest")
+    void RESP_11_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.nextPlayer();
+        game.eventDeck.addFirst(new Main.Card("Q4", 4, "Quest", null));
+        game.startPlayerTurn();
+
+        // test - players decline sponsor and next player is asked
+        StringWriter output = new StringWriter();
+        String input = "N\nN\nN\nN";
+
+        game.promptSponsorQuest(new Scanner(input), new PrintWriter(output));
+        assertTrue(output.toString().contains("P1, enter Y to sponsor the quest") &&
+                output.toString().contains("P2, enter Y to sponsor the quest") &&
+                output.toString().contains("P3, enter Y to sponsor the quest") &&
+                output.toString().contains("P4, enter Y to sponsor the quest"));
+    }
 }
 
