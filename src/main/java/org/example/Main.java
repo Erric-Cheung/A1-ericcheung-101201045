@@ -35,6 +35,7 @@ public class Main {
     // Game
     int currentPlayerIndex = 0;
     Card currentEventCard;
+    Player currentQuestSponsor;
 
     public static class Card {
         String name;
@@ -333,6 +334,7 @@ public class Main {
             output.flush();
             String inputStr = input.nextLine();
             if (inputStr.equals("Y")) {
+                currentQuestSponsor = player;
                 return;
             }
             nextPlayer();

@@ -427,5 +427,31 @@ class MainTest {
                 output.toString().contains("P3, enter Y to sponsor the quest") &&
                 output.toString().contains("P4, enter Y to sponsor the quest"));
     }
+    @Test
+    @DisplayName("Test sponsor is the correct player")
+    void RESP_11_test_03(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        // test - After
+
+        game.eventDeck.addFirst(new Main.Card("Q4", 4, "Quest", null));
+        game.startPlayerTurn();
+
+        StringWriter output = new StringWriter();
+        String input = "N\nN\nY";
+
+        game.promptSponsorQuest(new Scanner(input), new PrintWriter(output));
+
+        String name = "";
+        if(game.currentQuestSponsor != null){
+            name = game.currentQuestSponsor.playerName;
+        }
+
+        assertEquals("P3", name);
+    }
+
 }
 
