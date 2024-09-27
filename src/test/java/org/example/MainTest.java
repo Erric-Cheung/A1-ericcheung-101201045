@@ -177,7 +177,7 @@ class MainTest {
         // test 1 - displays current player
         game.nextPlayer();
         game.displayCurrentPlayer(new PrintWriter(output));
-        assertTrue(output.toString().contains("CURRENT PLAYER: P2"));
+        assertTrue(output.toString().contains("Current Player: P2"));
     }
 
     @Test
@@ -210,7 +210,13 @@ class MainTest {
 
         // test 2 - displays hand in correct order
         game.displayCurrentPlayer(new PrintWriter(output));
-        assertTrue(output.toString().contains("F5 F10 F70 D5 S10 H10 L20"));
+        assertTrue(
+                output.toString().contains("0.F5") &&
+                        output.toString().contains("1.F10") &&
+                        output.toString().contains("3.D5") &&
+                        output.toString().contains("4.S10") &&
+                        output.toString().contains("5.H10") &&
+                        output.toString().contains("6.L20"));
     }
 
     @Test

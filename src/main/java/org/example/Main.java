@@ -15,6 +15,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         PrintWriter output = new PrintWriter(System.out);
 
+        game.displayCurrentPlayer(output);
         game.startPlayerTurn();
         game.promptPlayer(input, output);
     }
@@ -268,22 +269,31 @@ public class Main {
 
     public void displayCurrentPlayer(PrintWriter output) {
         Player player = getCurrentPlayer();
-        ArrayList<Card> hand = player.adventureHand;
-        output.println("CURRENT PLAYER: " + player.playerName);
-        output.print("HAND: ");
-        for (Card card : hand) {
-            output.print(card.name + " ");
-        }
+        output.println("Current Player: " + player.playerName);
+        output.println("Current Hand: ");
+        displayCurrentAdventureHand(output);
+        output.println();
+        output.flush();
     }
 
     public void displayEventCard(PrintWriter output) {
-        String effect = currentEventCard.effect;
         String cardName = currentEventCard.name;
+        if (Objects.equals(currentEventCard.type, "Quest")) {
+            output.println("DRAWN CARD: " + cardName);
+        }
+        if (Objects.equals(currentEventCard.type, "Event")) {
+            String effect = currentEventCard.effect;
+            output.println("DRAWN CARD: " + cardName + ", " + effect);
+        }
 
-        output.println("DRAWN CARD: " + cardName + ", " + effect);
+        output.flush();
     }
 
-    public void displayAdventureHand() {
+    public void displayCurrentAdventureHand(PrintWriter output) {
+        Player player = getCurrentPlayer();
+        for (int i = 0; i < player.getPlayerAdventureHandSize(); i++) {
+            output.print(i + "." + player.adventureHand.get(i).name + "   ");
+        }
     }
 
     public void promptFinishTurn(Scanner input, PrintWriter output) {
@@ -301,9 +311,7 @@ public class Main {
 
         while (player.getPlayerAdventureHandSize() > 12) {
             output.println("Please select a card to discard from your hand:");
-            for (int i = 0; i < player.getPlayerAdventureHandSize(); i++) {
-                output.print(i + "." + player.adventureHand.get(i).name + "   ");
-            }
+            displayCurrentAdventureHand(output);
             output.flush();
             output.println();
 
@@ -311,11 +319,9 @@ public class Main {
             player.removeAdventureCard(index);
 
             output.println("Updated Hand:");
-            for (int i = 0; i < player.getPlayerAdventureHandSize(); i++) {
-                output.print(i + "." + player.adventureHand.get(i).name + "   ");
-            }
-            output.flush();
+            displayCurrentAdventureHand(output);
             output.println();
+            output.flush();
         }
     }
 
@@ -323,7 +329,8 @@ public class Main {
         for (int i = 0; i < playerList.size(); i++) {
             Player player = getCurrentPlayer();
             String playerName = player.getPlayerName();
-            output.println(playerName + ", enter Y to sponsor the quest"); output.flush();
+            output.println(playerName + ", enter Y to sponsor the quest");
+            output.flush();
             String inputStr = input.nextLine();
             if (inputStr.equals("Y")) {
                 return;
@@ -333,7 +340,16 @@ public class Main {
     }
 
     public void promptPlayer(Scanner input, PrintWriter output) {
+        displayEventCard(output);
 
+        // Check for over 12 cards
+        promptTrimHand(input, output);
+
+        if (Objects.equals(currentEventCard.type, "Quest")) {
+            promptSponsorQuest(input, output);
+        }
+
+        promptFinishTurn(input, output);
     }
 
     // Helper
