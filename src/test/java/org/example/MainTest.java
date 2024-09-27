@@ -384,11 +384,11 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
+        game.nextPlayer();
 
         Main.Player player = game.getCurrentPlayer();
         String currentPlayerName = player.playerName;
 
-        game.nextPlayer();
         game.eventDeck.addFirst(new Main.Card("Q4", 4, "Quest", null));
         game.startPlayerTurn();
 

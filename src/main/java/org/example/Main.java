@@ -9,13 +9,14 @@ public class Main {
     public static void main(String[] args) {
         Main game = new Main();
         game.initializeAdventureDeck();
+        game.initializeEventDeck();
         game.initializePlayers();
 
         Scanner input = new Scanner(System.in);
         PrintWriter output = new PrintWriter(System.out);
 
-        game.displayCurrentPlayer(output);
-        game.promptFinishTurn(input, output);
+        game.startPlayerTurn();
+        game.promptPlayer(input, output);
     }
 
     // Decks
@@ -318,14 +319,26 @@ public class Main {
         }
     }
 
-    public void promptSponsorQuest(Scanner input, PrintWriter output){
+    public void promptSponsorQuest(Scanner input, PrintWriter output) {
+        for (int i = 0; i < playerList.size(); i++) {
+            Player player = getCurrentPlayer();
+            String playerName = player.getPlayerName();
+            output.println(playerName + ", enter Y to sponsor the quest"); output.flush();
+            String inputStr = input.nextLine();
+            if (inputStr.equals("Y")) {
+                return;
+            }
+            nextPlayer();
+        }
+    }
+
+    public void promptPlayer(Scanner input, PrintWriter output) {
 
     }
 
-
     // Helper
 
-    public void overwriteAdventureHand(Player player, int index, Card card){
+    public void overwriteAdventureHand(Player player, int index, Card card) {
         player.adventureHand.remove(index);
         player.adventureHand.add(index, card);
     }
