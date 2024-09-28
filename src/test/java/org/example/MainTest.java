@@ -427,9 +427,10 @@ class MainTest {
                 output.toString().contains("P3, enter Y to sponsor the quest") &&
                 output.toString().contains("P4, enter Y to sponsor the quest"));
     }
+
     @Test
     @DisplayName("Test sponsor is the correct player")
-    void RESP_11_test_03(){
+    void RESP_11_test_03() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -446,12 +447,67 @@ class MainTest {
         game.promptSponsorQuest(new Scanner(input), new PrintWriter(output));
 
         String name = "";
-        if(game.currentQuestSponsor != null){
+        if (game.currentQuestSponsor != null) {
             name = game.currentQuestSponsor.playerName;
         }
 
         assertEquals("P3", name);
     }
 
+    @Test
+    @DisplayName("Test hand is updated and displayed for the building of each stage")
+    void RESP_12_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\n0\nquit\n0\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        System.out.println(output);
+        assertTrue(output.toString().contains("0.F5   1.F5   2.F10   3.F20") &&
+                output.toString().contains("0.F5   1.F10   2.F20") &&
+                output.toString().contains("0.F20"));
+    }
+
+    @Test
+    @DisplayName("Test player is prompted to select cards in each stage")
+    void RESP_12_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\n0\nquit\n0\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Please select a card to include in stage 1") &&
+                output.toString().contains("Please select a card to include in stage 2") &&
+                output.toString().contains("Please select a card to include in stage 3"));
+    }
+
+
 }
+
 

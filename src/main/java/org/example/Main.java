@@ -36,6 +36,7 @@ public class Main {
     int currentPlayerIndex = 0;
     Card currentEventCard;
     Player currentQuestSponsor;
+    ArrayList<ArrayList<Card>> currentQuestStages;
 
     public static class Card {
         String name;
@@ -352,6 +353,10 @@ public class Main {
         }
 
         promptFinishTurn(input, output);
+    }
+
+    public void promptBuildQuest(Scanner input, PrintWriter output) {
+
     }
 
     // Helper
