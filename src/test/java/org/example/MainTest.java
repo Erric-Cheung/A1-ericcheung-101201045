@@ -475,7 +475,6 @@ class MainTest {
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
         game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
 
-        System.out.println(output);
         assertTrue(output.toString().contains("0.F5   1.F5   2.F10   3.F20") &&
                 output.toString().contains("0.F5   1.F10   2.F20") &&
                 output.toString().contains("0.F20"));

@@ -18,6 +18,11 @@ public class Main {
         game.displayCurrentPlayer(output);
         game.startPlayerTurn();
         game.promptPlayer(input, output);
+
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.promptBuildQuest(input, output);
     }
 
     // Decks
@@ -36,7 +41,7 @@ public class Main {
     int currentPlayerIndex = 0;
     Card currentEventCard;
     Player currentQuestSponsor;
-    ArrayList<ArrayList<Card>> currentQuestStages;
+    Quest currentQuest;
 
     public static class Card {
         String name;
@@ -72,6 +77,10 @@ public class Main {
             adventureHand.remove(i);
         }
 
+        public Card getAdventureCard(int index){
+            return adventureHand.get(index);
+        }
+
         public void setAdventureHand(ArrayList<Card> hand) {
             adventureHand = hand;
         }
@@ -94,6 +103,38 @@ public class Main {
 
         public String getPlayerName() {
             return playerName;
+        }
+    }
+
+    public static class Quest {
+        int questValue;
+        Player questSponsor;
+        ArrayList<ArrayList<Card>> stages;
+
+        public Quest(Player player, Card questCard) {
+            stages = new ArrayList<>();
+            questValue = questCard.value;
+            questSponsor = player;
+        }
+
+        public void addStage(int index, ArrayList<Card> stage) {
+
+        }
+
+        public ArrayList<Card> getStage(int index) {
+            return stages.get(index);
+        }
+
+        public int getStageValue(int index){
+            return 0;
+        }
+
+        public int getQuestValue(){
+            return questValue;
+        }
+
+        public Player getQuestSponsor(){
+            return questSponsor;
         }
     }
 
@@ -356,7 +397,40 @@ public class Main {
     }
 
     public void promptBuildQuest(Scanner input, PrintWriter output) {
+        currentQuest = new Quest(getCurrentPlayer(), currentEventCard);
+        Player questSponsor = currentQuest.getQuestSponsor();
 
+        for (int i = 0; i < currentQuest.getQuestValue(); i++) {
+            ArrayList<Card> stage = new ArrayList<>();
+            int stageNumber = i + 1;
+
+            while (true) {
+                output.println("Please select a card to include in stage " + stageNumber + " or enter quit to finish stage " + stageNumber + ".");
+                displayCurrentAdventureHand(output);
+                output.println();
+                output.flush();
+
+                String inputStr = input.nextLine();
+                if (Objects.equals(inputStr, "quit")) {
+                    break;
+                }
+
+                int cardIndex = Integer.parseInt(inputStr);
+                Card card = questSponsor.getAdventureCard(cardIndex);
+                questSponsor.removeAdventureCard(cardIndex);
+                stage.add(card);
+
+            }
+            output.print("Cards used in the stage " + stageNumber + ": ");
+            for (Card card : stage) {
+                output.print(card.name + "   ");
+            }
+            output.println();
+            output.flush();
+        }
+
+        output.println("Quest stages successfully built.");
+        output.flush();
     }
 
     // Helper
