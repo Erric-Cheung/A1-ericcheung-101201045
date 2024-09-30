@@ -77,7 +77,7 @@ public class Main {
             adventureHand.remove(i);
         }
 
-        public Card getAdventureCard(int index){
+        public Card getAdventureCard(int index) {
             return adventureHand.get(index);
         }
 
@@ -125,15 +125,15 @@ public class Main {
             return stages.get(index);
         }
 
-        public int getStageValue(int index){
+        public int getStageValue(int index) {
             return 0;
         }
 
-        public int getQuestValue(){
+        public int getQuestValue() {
             return questValue;
         }
 
-        public Player getQuestSponsor(){
+        public Player getQuestSponsor() {
             return questSponsor;
         }
     }
