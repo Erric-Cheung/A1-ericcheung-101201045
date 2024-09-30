@@ -399,10 +399,12 @@ public class Main {
     public void promptBuildQuest(Scanner input, PrintWriter output) {
         currentQuest = new Quest(getCurrentPlayer(), currentEventCard);
         Player questSponsor = currentQuest.getQuestSponsor();
+        int prevStageValue = 0;
 
         for (int i = 0; i < currentQuest.getQuestValue(); i++) {
             ArrayList<Card> stage = new ArrayList<>();
             int stageNumber = i + 1;
+            int stageValue = 0;
 
             while (true) {
                 output.println("Please select a card to include in stage " + stageNumber + " or enter quit to finish stage " + stageNumber + ".");
@@ -411,20 +413,33 @@ public class Main {
                 output.flush();
 
                 String inputStr = input.nextLine();
+
+                if (Objects.equals(inputStr, "quit") && stage.isEmpty()) {
+                    output.println("A stage cannot be empty");
+                    continue;
+                }
+                if (Objects.equals(inputStr, "quit") && stageValue <= prevStageValue) {
+                    output.println("Insufficient value for this stage");
+                    continue;
+                }
                 if (Objects.equals(inputStr, "quit")) {
+                    prevStageValue = stageValue;
                     break;
                 }
 
                 int cardIndex = Integer.parseInt(inputStr);
                 Card card = questSponsor.getAdventureCard(cardIndex);
                 questSponsor.removeAdventureCard(cardIndex);
-                stage.add(card);
 
+                stage.add(card);
+                stageValue = stageValue + card.value;
             }
+
             output.print("Cards used in the stage " + stageNumber + ": ");
             for (Card card : stage) {
                 output.print(card.name + "   ");
             }
+
             output.println();
             output.flush();
         }
