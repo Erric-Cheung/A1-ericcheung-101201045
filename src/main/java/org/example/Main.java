@@ -405,6 +405,8 @@ public class Main {
             ArrayList<Card> stage = new ArrayList<>();
             int stageNumber = i + 1;
             int stageValue = 0;
+            boolean containsFoe = false;
+
 
             while (true) {
                 output.println("Please select a card to include in stage " + stageNumber + " or enter quit to finish stage " + stageNumber + ".");
@@ -429,8 +431,30 @@ public class Main {
 
                 int cardIndex = Integer.parseInt(inputStr);
                 Card card = questSponsor.getAdventureCard(cardIndex);
-                questSponsor.removeAdventureCard(cardIndex);
 
+                if (Objects.equals(card.type, "Foe")) {
+                    if (containsFoe) {
+                        output.println("Stage cannot contain more than one foe");
+                        continue;
+                    }
+                    containsFoe = true;
+                }
+
+                boolean isDuplicate = false;
+                if (Objects.equals(card.type, "Weapon")) {
+                    for (Card stageCard : stage) {
+                        if (Objects.equals(stageCard.name, card.name)) {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+                }
+                if (isDuplicate) {
+                    output.println("Stage cannot contain repeated weapons");
+                    continue;
+                }
+
+                questSponsor.removeAdventureCard(cardIndex);
                 stage.add(card);
                 stageValue = stageValue + card.value;
             }

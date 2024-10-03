@@ -468,15 +468,15 @@ class MainTest {
 
         game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
         game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
         game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
         game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
 
-        assertTrue(output.toString().contains("0.F5   1.F5   2.F10   3.F20") &&
-                output.toString().contains("0.F5   1.F10   2.F20") &&
+        assertTrue(output.toString().contains("0.F5   1.F5   2.D5   3.F20") &&
+                output.toString().contains("0.F5   1.D5   2.F20") &&
                 output.toString().contains("0.F20"));
     }
 
@@ -494,7 +494,7 @@ class MainTest {
 
         game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
         game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
         game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
@@ -520,7 +520,7 @@ class MainTest {
 
         game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
         game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
         game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
@@ -543,13 +543,13 @@ class MainTest {
 
         game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
         game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
         game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "quit\n0\nquit\n0\nquit\n0\nquit\n0\nquit";
         game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
-        System.out.println(output);
+
         assertTrue(output.toString().contains("Insufficient value for this stage"));
     }
 
@@ -567,7 +567,7 @@ class MainTest {
 
         game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
         game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
         game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
@@ -575,6 +575,56 @@ class MainTest {
         game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
 
         assertTrue(output.toString().contains("Cards used in the stage 1: F5"));
+    }
+
+    @Test
+    @DisplayName("Displays 'Multiple foe cards is not valid'")
+    void RESP_13_test_04(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 4, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\n0\n1\nquit\n1\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Stage cannot contain more than one foe"));
+    }
+
+    @Test
+    @DisplayName("Displays 'Repeated weapon cards is not valid'")
+    void RESP_13_test_05(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 4, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\n0\n0\nquit\n1\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Stage cannot contain repeated weapons"));
     }
 
 
