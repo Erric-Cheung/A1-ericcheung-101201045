@@ -627,6 +627,58 @@ class MainTest {
         assertTrue(output.toString().contains("Stage cannot contain repeated weapons"));
     }
 
+    @Test
+    @DisplayName("Quest has correct number of stages")
+    void RESP_14_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\n0\nquit\n0\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        Main.Quest quest = game.currentQuest;
+        assertEquals(3, quest.stages.size());
+    }
+
+    @Test
+    @DisplayName("Quest stages has correct total value from cards selected")
+    void RESP_14_test_02(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\n0\nquit\n0\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        Main.Quest quest = game.currentQuest;
+
+        assertEquals(5, quest.getStageValue(0));
+        assertEquals(10, quest.getStageValue(1));
+        assertEquals(20, quest.getStageValue(2));
+    }
+
 
 }
 
