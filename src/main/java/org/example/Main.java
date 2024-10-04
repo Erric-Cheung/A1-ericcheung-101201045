@@ -117,8 +117,8 @@ public class Main {
             questSponsor = player;
         }
 
-        public void addStage(int index, ArrayList<Card> stage) {
-
+        public void addStage(ArrayList<Card> stage) {
+            stages.addLast(stage);
         }
 
         public ArrayList<Card> getStage(int index) {
@@ -126,7 +126,13 @@ public class Main {
         }
 
         public int getStageValue(int index) {
-            return 0;
+            int totalValue = 0;
+            ArrayList<Card> stage = getStage(index);
+            for(Card card : stage){
+                totalValue = totalValue + card.value;
+            }
+
+            return totalValue;
         }
 
         public int getQuestValue() {
@@ -463,6 +469,8 @@ public class Main {
             for (Card card : stage) {
                 output.print(card.name + "   ");
             }
+
+            currentQuest.addStage(stage);
 
             output.println();
             output.flush();
