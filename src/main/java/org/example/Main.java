@@ -413,7 +413,6 @@ public class Main {
             int stageValue = 0;
             boolean containsFoe = false;
 
-
             while (true) {
                 output.println("Please select a card to include in stage " + stageNumber + " or enter quit to finish stage " + stageNumber + ".");
                 displayCurrentAdventureHand(output);
@@ -480,6 +479,9 @@ public class Main {
         output.flush();
     }
 
+    public void promptBuiltAttack(Scanner input, PrintWriter output){
+
+    }
     // Helper
 
     public void overwriteAdventureHand(Player player, int index, Card card) {

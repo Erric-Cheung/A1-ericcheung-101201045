@@ -679,7 +679,50 @@ class MainTest {
         assertEquals(20, quest.getStageValue(2));
     }
 
+    @Test
+    @DisplayName("Test hand is displayed and updated for the building of the attack")
+    void RESP_15_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
 
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("0.F5   1.D5   2.D5   3.F20"));
+        assertTrue(output.toString().contains("0.D5   1.D5   2.F20"));
+    }
+
+    @Test
+    @DisplayName("Test player is prompted to select cards for attack or quit")
+    void RESP_15_test_02(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "quit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Please select a card to include in the attack or quit to finish the attack."));
+    }
 }
 
 
