@@ -695,11 +695,11 @@ class MainTest {
         game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
-        String input = "0\nquit";
+        String input = "1\nquit";
         game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
 
         assertTrue(output.toString().contains("0.F5   1.D5   2.D5   3.F20"));
-        assertTrue(output.toString().contains("0.D5   1.D5   2.F20"));
+        assertTrue(output.toString().contains("0.F5   1.D5   2.F20"));
     }
 
     @Test

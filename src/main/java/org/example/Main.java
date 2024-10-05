@@ -480,7 +480,22 @@ public class Main {
     }
 
     public void promptBuiltAttack(Scanner input, PrintWriter output){
+        Player currentPlayer = getCurrentPlayer();
+        while(true){
+            output.println("Please select a card to include in the attack or quit to finish the attack.");
+            displayCurrentAdventureHand(output);
+            output.println();
+            output.flush();
 
+            String inputStr = input.nextLine();
+            if (Objects.equals(inputStr, "quit")) {
+                break;
+            }
+
+            int cardIndex = Integer.parseInt(inputStr);
+            Card card = currentPlayer.getAdventureCard(cardIndex);
+            currentPlayer.removeAdventureCard(cardIndex);
+        }
     }
     // Helper
 
