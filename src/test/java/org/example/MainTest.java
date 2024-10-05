@@ -723,6 +723,96 @@ class MainTest {
 
         assertTrue(output.toString().contains("Please select a card to include in the attack or quit to finish the attack."));
     }
+
+    @Test
+    @DisplayName("Displays the selected cards the attack after entering quit")
+    void RESP_16_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+        
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+
+        StringWriter output = new StringWriter();
+        String input = "2\n2\nquit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Cards used in the attack: D5   H10"));
+    }
+
+    @Test
+    @DisplayName("Displays 'Repeated weapon cards is not valid' when building attack")
+    void RESP_16_test_02(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+
+        StringWriter output = new StringWriter();
+        String input = "1\n1\nquit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Repeated weapon cards is not valid"));
+    }
+
+    @Test
+    @DisplayName("Displays 'Foe cards is not valid' when building attack")
+    void RESP_16_test_03(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Foe cards is not valid"));
+    }
+
+    @Test
+    @DisplayName("Displays the currently selected cards for the attack")
+    void RESP_16_test_04(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+
+        StringWriter output = new StringWriter();
+        String input = "2\n2\nquit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Current cards in attack: D5   H10"));
+    }
+
+
 }
 
 
