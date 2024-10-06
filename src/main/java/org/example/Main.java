@@ -55,17 +55,33 @@ public class Main {
             this.type = type;
             this.effect = effect;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Card other = (Card) obj;
+            if (this.name == null) {
+                return other.name == null;
+            } else return this.name.equals(other.name);
+        }
     }
 
     public static class Player {
         String playerName;
         ArrayList<Card> adventureHand;
+        ArrayList<Card> attackHand;
         int shields;
 
         public Player(String name) {
             this.playerName = name;
             shields = 0;
             adventureHand = new ArrayList<>();
+            attackHand = new ArrayList<>();
         }
 
         public void addAdventureCard(Card card) {
@@ -104,6 +120,18 @@ public class Main {
         public String getPlayerName() {
             return playerName;
         }
+
+        public ArrayList<Card> getAttack() {
+            return attackHand;
+        }
+
+        public void addAttackCard(Card card) {
+            attackHand.addLast(card);
+        }
+
+        public void clearAttack() {
+
+        }
     }
 
     public static class Quest {
@@ -128,7 +156,7 @@ public class Main {
         public int getStageValue(int index) {
             int totalValue = 0;
             ArrayList<Card> stage = getStage(index);
-            for(Card card : stage){
+            for (Card card : stage) {
                 totalValue = totalValue + card.value;
             }
 
@@ -479,9 +507,10 @@ public class Main {
         output.flush();
     }
 
-    public void promptBuiltAttack(Scanner input, PrintWriter output){
+    public void promptBuiltAttack(Scanner input, PrintWriter output) {
         Player currentPlayer = getCurrentPlayer();
-        while(true){
+
+        while (true) {
             output.println("Please select a card to include in the attack or quit to finish the attack.");
             displayCurrentAdventureHand(output);
             output.println();
@@ -494,8 +523,33 @@ public class Main {
 
             int cardIndex = Integer.parseInt(inputStr);
             Card card = currentPlayer.getAdventureCard(cardIndex);
+
+            if (Objects.equals(card.type, "Foe")) {
+                output.println("Foe cards is not valid");
+                continue;
+            }
+
+            if (currentPlayer.attackHand.contains(card)) {
+                output.println("Repeated weapon cards is not valid");
+                continue;
+            }
+
             currentPlayer.removeAdventureCard(cardIndex);
+            currentPlayer.addAttackCard(card);
+
+            output.print("Current cards in attack: ");
+            for (Card currentCard : currentPlayer.getAttack()) {
+                output.print(currentCard.name + "   ");
+            }
+            output.println();
+            output.flush();
         }
+
+        output.print("Cards used in the attack: ");
+        for (Card card : currentPlayer.getAttack()) {
+            output.print(card.name + "   ");
+        }
+
     }
     // Helper
 
