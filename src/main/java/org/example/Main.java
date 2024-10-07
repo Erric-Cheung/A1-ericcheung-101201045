@@ -125,10 +125,6 @@ public class Main {
             return attackHand;
         }
 
-        public void addAttackCard(Card card) {
-            attackHand.addLast(card);
-        }
-
         public void clearAttack() {
 
         }
@@ -463,9 +459,9 @@ public class Main {
                 }
 
                 int cardIndex = Integer.parseInt(inputStr);
-                Card card = questSponsor.getAdventureCard(cardIndex);
+                Card selectedCard = questSponsor.getAdventureCard(cardIndex);
 
-                if (Objects.equals(card.type, "Foe")) {
+                if (Objects.equals(selectedCard.type, "Foe")) {
                     if (containsFoe) {
                         output.println("Stage cannot contain more than one foe");
                         continue;
@@ -474,9 +470,9 @@ public class Main {
                 }
 
                 boolean isDuplicate = false;
-                if (Objects.equals(card.type, "Weapon")) {
+                if (Objects.equals(selectedCard.type, "Weapon")) {
                     for (Card stageCard : stage) {
-                        if (Objects.equals(stageCard.name, card.name)) {
+                        if (Objects.equals(stageCard.name, selectedCard.name)) {
                             isDuplicate = true;
                             break;
                         }
@@ -488,19 +484,25 @@ public class Main {
                 }
 
                 questSponsor.removeAdventureCard(cardIndex);
-                stage.add(card);
-                stageValue = stageValue + card.value;
+                stage.add(selectedCard);
+                stageValue = stageValue + selectedCard.value;
+
+                output.print("Current cards in stage: ");
+                for (Card card : stage) {
+                    output.print(card.name + "   ");
+                }
+                output.println();
+                output.flush();
             }
 
             output.print("Cards used in the stage " + stageNumber + ": ");
             for (Card card : stage) {
                 output.print(card.name + "   ");
             }
-
-            currentQuest.addStage(stage);
-
             output.println();
             output.flush();
+
+            currentQuest.addStage(stage);
         }
 
         output.println("Quest stages successfully built.");
@@ -509,6 +511,7 @@ public class Main {
 
     public void promptBuiltAttack(Scanner input, PrintWriter output) {
         Player currentPlayer = getCurrentPlayer();
+        ArrayList<Card> attack = new ArrayList<>();
 
         while (true) {
             output.println("Please select a card to include in the attack or quit to finish the attack.");
@@ -522,34 +525,35 @@ public class Main {
             }
 
             int cardIndex = Integer.parseInt(inputStr);
-            Card card = currentPlayer.getAdventureCard(cardIndex);
+            Card selectedCard = currentPlayer.getAdventureCard(cardIndex);
 
-            if (Objects.equals(card.type, "Foe")) {
+            if (Objects.equals(selectedCard.type, "Foe")) {
                 output.println("Foe cards is not valid");
                 continue;
             }
 
-            if (currentPlayer.attackHand.contains(card)) {
+            if (attack.contains(selectedCard)) {
                 output.println("Repeated weapon cards is not valid");
                 continue;
             }
 
             currentPlayer.removeAdventureCard(cardIndex);
-            currentPlayer.addAttackCard(card);
+            attack.add(selectedCard);
 
             output.print("Current cards in attack: ");
-            for (Card currentCard : currentPlayer.getAttack()) {
-                output.print(currentCard.name + "   ");
+            for (Card card : attack) {
+                output.print(card.name + "   ");
             }
             output.println();
             output.flush();
         }
 
         output.print("Cards used in the attack: ");
-        for (Card card : currentPlayer.getAttack()) {
+        for (Card card : attack) {
             output.print(card.name + "   ");
         }
-
+        output.println();
+        output.flush();
     }
     // Helper
 

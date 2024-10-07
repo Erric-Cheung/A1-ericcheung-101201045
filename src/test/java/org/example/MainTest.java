@@ -628,6 +628,32 @@ class MainTest {
     }
 
     @Test
+    @DisplayName("Displays the currently selected cards for the stage")
+    void RESP_13_test_06(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\n0\nquit\n0\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Current cards in stage: F5"));
+        assertTrue(output.toString().contains("Current cards in stage: F5   D5"));
+        assertTrue(output.toString().contains("Current cards in stage: F20"));
+    }
+
+    @Test
     @DisplayName("Quest has correct number of stages")
     void RESP_14_test_01(){
         Main game = new Main();
@@ -811,7 +837,6 @@ class MainTest {
 
         assertTrue(output.toString().contains("Current cards in attack: D5   H10"));
     }
-
 
 }
 
