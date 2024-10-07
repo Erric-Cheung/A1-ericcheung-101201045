@@ -125,9 +125,18 @@ public class Main {
             return attackHand;
         }
 
-        public int getAttackValue(){
-            return 0;
+        public int getAttackValue() {
+            int value = 0;
+            for (Card card : attackHand) {
+                value = value + card.value;
+            }
+            return value;
         }
+
+        public void setAttack(ArrayList<Card> attack) {
+            this.attackHand = attack;
+        }
+
 
         public void clearAttack() {
 
@@ -558,7 +567,10 @@ public class Main {
         }
         output.println();
         output.flush();
+
+        currentPlayer.setAttack(attack);
     }
+
     // Helper
 
     public void overwriteAdventureHand(Player player, int index, Card card) {
