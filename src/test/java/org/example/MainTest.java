@@ -838,6 +838,52 @@ class MainTest {
         assertTrue(output.toString().contains("Current cards in attack: D5   H10"));
     }
 
+    @Test
+    @DisplayName("Attack has correct number of cards")
+    void RESP_17_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+
+        StringWriter output = new StringWriter();
+        String input = "2\n2\nquit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        assertEquals(2, currentPlayer.getAttack().size());
+    }
+
+    @Test
+    @DisplayName("Attack has correct value")
+    void RESP_17_test_02(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+
+        StringWriter output = new StringWriter();
+        String input = "2\n2\nquit";
+        game.promptBuiltAttack(new Scanner(input), new PrintWriter(output));
+
+        int value = currentPlayer.getAttackValue();
+
+        assertEquals(15, value);
+    }
+
 }
 
 

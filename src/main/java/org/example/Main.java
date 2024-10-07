@@ -125,6 +125,10 @@ public class Main {
             return attackHand;
         }
 
+        public int getAttackValue(){
+            return 0;
+        }
+
         public void clearAttack() {
 
         }
