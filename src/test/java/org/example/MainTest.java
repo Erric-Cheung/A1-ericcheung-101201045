@@ -757,7 +757,7 @@ class MainTest {
         game.initializeAdventureDeck();
         game.initializeEventDeck();
         game.initializePlayers();
-        
+
         Main.Player currentPlayer = game.getCurrentPlayer();
 
         game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
@@ -884,6 +884,49 @@ class MainTest {
         assertEquals(15, value);
     }
 
+    @Test
+    @DisplayName("All players other than sponsor prompted to participate in quest")
+    void RESP_18_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.nextPlayer();
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = currentPlayer;
+
+        StringWriter output = new StringWriter();
+        String input = "Y\nY\nY";
+
+        game.promptParticipate(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("P1, enter 'Y' to participate in quest, or enter anything else to decline"));
+        assertTrue(output.toString().contains("P3, enter 'Y' to participate in quest, or enter anything else to decline"));
+        assertTrue(output.toString().contains("P4, enter 'Y' to participate in quest, or enter anything else to decline"));
+    }
+
+    @Test
+    @DisplayName("Displays eligible participants")
+    void RESP_18_test_02(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.nextPlayer();
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = currentPlayer;
+
+        StringWriter output = new StringWriter();
+        String input = "Y\nN\nY";
+
+        game.promptParticipate(new Scanner(input), new PrintWriter(output));
+        game.displayParticipants(new PrintWriter(output));
+        assertTrue(output.toString().contains("Participants: P1, P4"));
+    }
 }
 
 
