@@ -896,6 +896,7 @@ class MainTest {
         Main.Player currentPlayer = game.getCurrentPlayer();
         game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = currentPlayer;
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         StringWriter output = new StringWriter();
         String input = "Y\nY\nY";
@@ -919,12 +920,14 @@ class MainTest {
         Main.Player currentPlayer = game.getCurrentPlayer();
         game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = currentPlayer;
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         StringWriter output = new StringWriter();
         String input = "Y\nN\nY";
 
         game.promptParticipate(new Scanner(input), new PrintWriter(output));
         game.displayParticipants(new PrintWriter(output));
+
         assertTrue(output.toString().contains("Participants: P1, P4"));
     }
 }

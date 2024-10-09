@@ -147,9 +147,11 @@ public class Main {
         int questValue;
         Player questSponsor;
         ArrayList<ArrayList<Card>> stages;
+        ArrayList<Player> particpants;
 
         public Quest(Player player, Card questCard) {
             stages = new ArrayList<>();
+            particpants = new ArrayList<>();
             questValue = questCard.value;
             questSponsor = player;
         }
@@ -179,6 +181,16 @@ public class Main {
         public Player getQuestSponsor() {
             return questSponsor;
         }
+
+        public void addParticipant(Player player) {
+            particpants.add(player);
+        }
+
+        public ArrayList<Player> getParticipants() {
+            return particpants;
+        }
+
+
     }
 
     public static class CardComparator implements Comparator<Card> {
@@ -569,6 +581,33 @@ public class Main {
         output.flush();
 
         currentPlayer.setAttack(attack);
+    }
+
+    public void promptParticipate(Scanner input, PrintWriter output) {
+        Player questSponsor = currentQuest.getQuestSponsor();
+        for (Player player : playerList) {
+            if (Objects.equals(player.getPlayerName(), questSponsor.getPlayerName())) {
+                continue;
+            }
+
+            output.println(player.getPlayerName() + ", enter 'Y' to participate in quest, or enter anything else to decline");
+            output.flush();
+
+            String inputStr = input.nextLine();
+            if (Objects.equals(inputStr, "Y")) {
+                currentQuest.addParticipant(player);
+            }
+
+        }
+    }
+
+    public void displayParticipants(PrintWriter output) {
+        output.print("Participants: ");
+        for (Player player : currentQuest.getParticipants()) {
+            output.print(player.getPlayerName() + ", ");
+        }
+        output.println();
+        output.flush();
     }
 
     // Helper
