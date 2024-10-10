@@ -985,6 +985,40 @@ class MainTest {
         assertTrue(participants.contains(game.player4));
     }
 
+    @Test
+    @DisplayName("Participants with less attack than value of stage lose and ineligible")
+    void RESP_20_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+
+        game.currentQuest.addParticipant(game.player1);
+        game.currentQuest.addParticipant(game.player3);
+        game.currentQuest.addParticipant(game.player4);
+
+        ArrayList<Main.Card> stage = new ArrayList<>();
+        stage.add(new Main.Card("F10", 10, "Foe", null));
+        game.currentQuest.addStage(stage);
+
+        ArrayList<Main.Card> attack1 = new ArrayList<>();
+        attack1.add(new Main.Card("H10", 10, "Weapon", null));
+        game.player1.setAttack(attack1);
+
+        ArrayList<Main.Card> attack2 = new ArrayList<>();
+        attack2.add(new Main.Card("D5", 5, "Weapon", null));
+        game.player3.setAttack(attack2);
+
+        // test - P1 is the only attack that beats the stage, eligible participants after attack are P1
+
+        game.resolveStageAttack();
+        assertEquals(1, game.currentQuest.getParticipants().size());
+        assertTrue(game.currentQuest.getParticipants().contains(game.player1));
+    }
+
 }
 
 
