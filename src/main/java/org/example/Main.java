@@ -139,9 +139,7 @@ public class Main {
         }
 
 
-        public void clearAttack() {
 
-        }
     }
 
     public static class Quest {
@@ -149,14 +147,14 @@ public class Main {
         Player questSponsor;
         ArrayList<ArrayList<Card>> stages;
         ArrayList<Player> participants;
-        int currentStage;
+        int currentStageNumber;
 
         public Quest(Player player, Card questCard) {
             stages = new ArrayList<>();
             participants = new ArrayList<>();
             questValue = questCard.value;
             questSponsor = player;
-            currentStage = 1;
+            currentStageNumber = 1;
         }
 
         public void addStage(ArrayList<Card> stage) {
@@ -193,8 +191,12 @@ public class Main {
             return participants;
         }
 
-        public int getCurrentStage() {
-            return currentStage;
+        public int getCurrentStageNumber() {
+            return currentStageNumber;
+        }
+
+        public int getCurrentStageIndex() {
+            return currentStageNumber - 1;
         }
 
     }
@@ -365,7 +367,20 @@ public class Main {
     }
 
     public void resolveStageAttack() {
+        ArrayList<Player> participants = currentQuest.getParticipants();
+        Iterator<Player> itr = participants.iterator();
 
+        int currentStage = currentQuest.getCurrentStageIndex();
+        int stageValue = currentQuest.getStageValue(currentStage);
+
+        while (itr.hasNext()) {
+            Player participant = itr.next();
+            int attackValue = participant.getAttackValue();
+
+            if (attackValue < stageValue) {
+                itr.remove();
+            }
+        }
     }
 
     // Interface
@@ -626,7 +641,7 @@ public class Main {
 
         while (itr.hasNext()) {
             Player player = itr.next();
-            output.println(player.getPlayerName() + ", enter 'W' to withdraw from the quest, or anything else to continue to stage " + currentQuest.getCurrentStage());
+            output.println(player.getPlayerName() + ", enter 'W' to withdraw from the quest, or anything else to continue to stage " + currentQuest.getCurrentStageNumber());
             String inputStr = input.nextLine();
             if (Objects.equals(inputStr, "W")) {
                 output.println(player.getPlayerName());
