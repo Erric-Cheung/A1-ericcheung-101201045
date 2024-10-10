@@ -147,11 +147,12 @@ public class Main {
         int questValue;
         Player questSponsor;
         ArrayList<ArrayList<Card>> stages;
-        ArrayList<Player> particpants;
+        ArrayList<Player> participants;
+        int currentStage;
 
         public Quest(Player player, Card questCard) {
             stages = new ArrayList<>();
-            particpants = new ArrayList<>();
+            participants = new ArrayList<>();
             questValue = questCard.value;
             questSponsor = player;
         }
@@ -183,11 +184,11 @@ public class Main {
         }
 
         public void addParticipant(Player player) {
-            particpants.add(player);
+            participants.add(player);
         }
 
         public ArrayList<Player> getParticipants() {
-            return particpants;
+            return participants;
         }
 
 
@@ -608,6 +609,11 @@ public class Main {
         }
         output.println();
         output.flush();
+    }
+
+
+    public void promptWithdraw(Scanner input, PrintWriter output){
+
     }
 
     // Helper

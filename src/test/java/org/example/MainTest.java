@@ -930,6 +930,61 @@ class MainTest {
 
         assertTrue(output.toString().contains("Participants: P1, P4"));
     }
+
+    @Test
+    @DisplayName("Prompts participant to tackle or withdraw from stage")
+    void RESP_19_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+
+        game.currentQuest.addParticipant(game.player1);
+        game.currentQuest.addParticipant(game.player3);
+        game.currentQuest.addParticipant(game.player4);
+
+        // test - game prompts all participants if they wish to withdraw
+        StringWriter output = new StringWriter();
+        String input = "W\nW\nW";
+
+        game.promptWithdraw(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("P1, enter 'W' to withdraw from the quest, or anything else to continue to stage 1"));
+        assertTrue(output.toString().contains("P3, enter 'W' to withdraw from the quest, or anything else to continue to stage 1"));
+        assertTrue(output.toString().contains("P4, enter 'W' to withdraw from the quest, or anything else to continue to stage 1"));
+        assertFalse(output.toString().contains("P2, enter 'W' to withdraw from the quest, or anything else to continue to stage 1"));
+    }
+
+    @Test
+    @DisplayName("Players who withdraw are no longer participants")
+    void RESP_19_test_02(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+
+        game.currentQuest.addParticipant(game.player1);
+        game.currentQuest.addParticipant(game.player3);
+        game.currentQuest.addParticipant(game.player4);
+
+        // test - P3 Withdraws, no longer participant
+        StringWriter output = new StringWriter();
+        String input = "Y\nW\nY";
+
+        game.promptWithdraw(new Scanner(input), new PrintWriter(output));
+
+        ArrayList<Main.Player> participants = game.currentQuest.getParticipants();
+        assertFalse(participants.contains(game.player3));
+        assertTrue(participants.contains(game.player1));
+        assertTrue(participants.contains(game.player4));
+    }
+
 }
 
 
