@@ -155,6 +155,7 @@ public class Main {
             participants = new ArrayList<>();
             questValue = questCard.value;
             questSponsor = player;
+            currentStage = 1;
         }
 
         public void addStage(ArrayList<Card> stage) {
@@ -191,6 +192,9 @@ public class Main {
             return participants;
         }
 
+        public int getCurrentStage(){
+            return currentStage;
+        }
 
     }
 
@@ -611,9 +615,20 @@ public class Main {
         output.flush();
     }
 
-
     public void promptWithdraw(Scanner input, PrintWriter output){
+        ArrayList<Player> participants = currentQuest.getParticipants();
+        Iterator<Player> itr = participants.iterator();
 
+        while(itr.hasNext()){
+            Player player = itr.next();
+            output.println(player.getPlayerName() + ", enter 'W' to withdraw from the quest, or anything else to continue to stage " + currentQuest.getCurrentStage());
+            String inputStr = input.nextLine();
+            if (Objects.equals(inputStr, "W")) {
+                output.println(player.getPlayerName());
+                itr.remove();
+            }
+
+        }
     }
 
     // Helper
