@@ -579,7 +579,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays 'Multiple foe cards is not valid'")
-    void RESP_13_test_04(){
+    void RESP_13_test_04() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -604,7 +604,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays 'Repeated weapon cards is not valid'")
-    void RESP_13_test_05(){
+    void RESP_13_test_05() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -629,7 +629,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays the currently selected cards for the stage")
-    void RESP_13_test_06(){
+    void RESP_13_test_06() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -655,7 +655,7 @@ class MainTest {
 
     @Test
     @DisplayName("Quest has correct number of stages")
-    void RESP_14_test_01(){
+    void RESP_14_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -680,7 +680,7 @@ class MainTest {
 
     @Test
     @DisplayName("Quest stages has correct total value from cards selected")
-    void RESP_14_test_02(){
+    void RESP_14_test_02() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -707,7 +707,7 @@ class MainTest {
 
     @Test
     @DisplayName("Test hand is displayed and updated for the building of the attack")
-    void RESP_15_test_01(){
+    void RESP_15_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -730,7 +730,7 @@ class MainTest {
 
     @Test
     @DisplayName("Test player is prompted to select cards for attack or quit")
-    void RESP_15_test_02(){
+    void RESP_15_test_02() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -752,7 +752,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays the selected cards the attack after entering quit")
-    void RESP_16_test_01(){
+    void RESP_16_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -774,7 +774,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays 'Repeated weapon cards is not valid' when building attack")
-    void RESP_16_test_02(){
+    void RESP_16_test_02() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -796,7 +796,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays 'Foe cards is not valid' when building attack")
-    void RESP_16_test_03(){
+    void RESP_16_test_03() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -818,7 +818,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays the currently selected cards for the attack")
-    void RESP_16_test_04(){
+    void RESP_16_test_04() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -840,7 +840,7 @@ class MainTest {
 
     @Test
     @DisplayName("Attack has correct number of cards")
-    void RESP_17_test_01(){
+    void RESP_17_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -862,7 +862,7 @@ class MainTest {
 
     @Test
     @DisplayName("Attack has correct value")
-    void RESP_17_test_02(){
+    void RESP_17_test_02() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -886,7 +886,7 @@ class MainTest {
 
     @Test
     @DisplayName("All players other than sponsor prompted to participate in quest")
-    void RESP_18_test_01(){
+    void RESP_18_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -910,7 +910,7 @@ class MainTest {
 
     @Test
     @DisplayName("Displays eligible participants")
-    void RESP_18_test_02(){
+    void RESP_18_test_02() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -933,7 +933,7 @@ class MainTest {
 
     @Test
     @DisplayName("Prompts participant to tackle or withdraw from stage")
-    void RESP_19_test_01(){
+    void RESP_19_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -960,7 +960,7 @@ class MainTest {
 
     @Test
     @DisplayName("Players who withdraw are no longer participants")
-    void RESP_19_test_02(){
+    void RESP_19_test_02() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -987,7 +987,7 @@ class MainTest {
 
     @Test
     @DisplayName("Participants with less attack than value of stage lose and ineligible")
-    void RESP_20_test_01(){
+    void RESP_20_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -1019,6 +1019,104 @@ class MainTest {
         assertTrue(game.currentQuest.getParticipants().contains(game.player1));
     }
 
+    @Test
+    @DisplayName("Cards used in attack are added to adventure discard pile")
+    void RESP_21_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+
+        game.currentQuest.addParticipant(game.player1);
+        game.currentQuest.addParticipant(game.player3);
+
+        ArrayList<Main.Card> attack1 = new ArrayList<>();
+        attack1.add(new Main.Card("H10", 10, "Weapon", null));
+        attack1.add(new Main.Card("D5", 5, "Weapon", null));
+        game.player1.setAttack(attack1);
+
+        ArrayList<Main.Card> attack2 = new ArrayList<>();
+        attack2.add(new Main.Card("D5", 5, "Weapon", null));
+        game.player3.setAttack(attack2);
+
+        game.discardAttackCards();
+        assertEquals(3, game.adventureDiscardPile.size());
+        assertTrue(game.adventureDiscardPile.contains(new Main.Card("D5", 5, "Weapon", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Main.Card("H10", 10, "Weapon", null)));
+    }
+
+    @Test
+    @DisplayName("Cards used to sponsor quest are added to adventure discard pile")
+    void RESP_21_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+
+        ArrayList<Main.Card> stage1 = new ArrayList<>();
+        stage1.add(new Main.Card("F10", 10, "Foe", null));
+        game.currentQuest.addStage(stage1);
+
+        ArrayList<Main.Card> stage2 = new ArrayList<>();
+        stage2.add(new Main.Card("F10", 10, "Foe", null));
+        stage2.add(new Main.Card("H10", 10, "Weapon", null));
+        game.currentQuest.addStage(stage2);
+
+        ArrayList<Main.Card> stage3 = new ArrayList<>();
+        stage3.add(new Main.Card("F70", 70, "Foe", null));
+        game.currentQuest.addStage(stage3);
+
+        game.discardSponsorCards();
+
+        assertEquals(4, game.adventureDiscardPile.size());
+        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F10", 10, "Foe", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F70", 70, "Foe", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Main.Card("H10", 10, "Weapon", null)));
+    }
+
+    @Test
+    @DisplayName("Cards trimmed from hand are added to adventure discard pile")
+    void RESP_21_test_03() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player player = game.getCurrentPlayer();
+        player.addAdventureCard(game.drawAdventureCard());
+        player.addAdventureCard(game.drawAdventureCard());
+        game.overwriteAdventureHand(player, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(player, 1, new Main.Card("F10", 10, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\n0";
+
+        game.promptTrimHand(new Scanner(input), new PrintWriter(output));
+        assertEquals(2, game.adventureDiscardPile.size());
+        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F10", 10, "Foe", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F5", 5, "Foe", null)));
+    }
+
+    @Test
+    @DisplayName("Drawn event cards are added to the discard pile")
+    void RESP_21_test_04() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.eventDeck.addFirst(new Main.Card("Prosperity", 0, "Event", "All players draw 2 adventure cards"));
+        game.startPlayerTurn();
+
+        assertEquals(1, game.eventDiscardPile.size());
+        assertTrue(game.eventDiscardPile.contains(new Main.Card("Prosperity", 0, "Event", "All players draw 2 adventure cards")));
+    }
 }
 
 

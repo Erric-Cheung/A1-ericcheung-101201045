@@ -43,6 +43,9 @@ public class Main {
     Card currentAdventureCard;
     Player currentQuestSponsor;
     Quest currentQuest;
+    ArrayList<Card> eventDiscardPile = new ArrayList<>();
+    ArrayList<Card> adventureDiscardPile = new ArrayList<>();
+
 
     public static class Card {
         String name;
@@ -137,7 +140,6 @@ public class Main {
         public void setAttack(ArrayList<Card> attack) {
             this.attackHand = attack;
         }
-
 
 
     }
@@ -381,6 +383,14 @@ public class Main {
                 itr.remove();
             }
         }
+    }
+
+    public void discardAttackCards() {
+
+    }
+
+    public void discardSponsorCards() {
+
     }
 
     // Interface
