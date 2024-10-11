@@ -93,8 +93,8 @@ public class Main {
             adventureHand.sort(new CardComparator());
         }
 
-        public void removeAdventureCard(int i) {
-            adventureHand.remove(i);
+        public Card removeAdventureCard(int i) {
+            return adventureHand.remove(i);
         }
 
         public Card getAdventureCard(int index) {
@@ -366,6 +366,8 @@ public class Main {
                 }
             }
         }
+
+        eventDiscardPile.add(drawnEventCard);
     }
 
     public void resolveStageAttack() {
@@ -386,11 +388,20 @@ public class Main {
     }
 
     public void discardAttackCards() {
-
+        for (Player player : currentQuest.participants) {
+            adventureDiscardPile.addAll(player.getAttack());
+        }
     }
 
     public void discardSponsorCards() {
+        for (ArrayList<Card> stage : currentQuest.stages) {
+            adventureDiscardPile.addAll(stage);
+        }
+    }
 
+    public void trimHand(Player player, int index){
+        Card card = player.removeAdventureCard(index);
+        adventureDiscardPile.add(card);
     }
 
     // Interface
@@ -449,7 +460,7 @@ public class Main {
             output.println();
 
             int index = Integer.parseInt(input.nextLine());
-            player.removeAdventureCard(index);
+            trimHand(player, index);
 
             output.println("Updated Hand:");
             displayCurrentAdventureHand(output);
