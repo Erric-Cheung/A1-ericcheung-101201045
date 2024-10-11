@@ -19,9 +19,6 @@ public class Main {
         game.startPlayerTurn();
         game.promptPlayer(input, output);
 
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
-        game.currentQuestSponsor = game.getCurrentPlayer();
-
         game.promptBuildQuest(input, output);
     }
 
@@ -42,6 +39,7 @@ public class Main {
     Card currentEventCard;
     Card currentAdventureCard;
     Player currentQuestSponsor;
+    Player currentPlayer = player1;
     Quest currentQuest;
     ArrayList<Card> eventDiscardPile = new ArrayList<>();
     ArrayList<Card> adventureDiscardPile = new ArrayList<>();
@@ -338,10 +336,11 @@ public class Main {
 
     public void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % 4;
+        currentPlayer = playerList.get(currentPlayerIndex);
     }
 
     public Player getCurrentPlayer() {
-        return playerList.get(currentPlayerIndex);
+        return currentPlayer;
     }
 
     public void startPlayerTurn() {
@@ -399,7 +398,7 @@ public class Main {
         }
     }
 
-    public void trimHand(Player player, int index){
+    public void trimHand(Player player, int index) {
         Card card = player.removeAdventureCard(index);
         adventureDiscardPile.add(card);
     }
@@ -452,9 +451,9 @@ public class Main {
 
     public void promptTrimHand(Scanner input, PrintWriter output) {
         Player player = getCurrentPlayer();
-
+        String playerName = player.getPlayerName();
         while (player.getPlayerAdventureHandSize() > 12) {
-            output.println("Please select a card to discard from your hand:");
+            output.println(playerName + " Please select a card to discard from your hand:");
             displayCurrentAdventureHand(output);
             output.flush();
             output.println();
@@ -502,6 +501,8 @@ public class Main {
         Player questSponsor = currentQuest.getQuestSponsor();
         int prevStageValue = 0;
 
+        String playerName = currentPlayer.getPlayerName();
+
         for (int i = 0; i < currentQuest.getQuestValue(); i++) {
             ArrayList<Card> stage = new ArrayList<>();
             int stageNumber = i + 1;
@@ -509,7 +510,7 @@ public class Main {
             boolean containsFoe = false;
 
             while (true) {
-                output.println("Please select a card to include in stage " + stageNumber + " or enter quit to finish stage " + stageNumber + ".");
+                output.println(playerName + " Please select a card to include in stage " + stageNumber + " or enter quit to finish stage " + stageNumber + ".");
                 displayCurrentAdventureHand(output);
                 output.println();
                 output.flush();
@@ -583,9 +584,9 @@ public class Main {
     public void promptBuiltAttack(Scanner input, PrintWriter output) {
         Player currentPlayer = getCurrentPlayer();
         ArrayList<Card> attack = new ArrayList<>();
-
+        String playerName = currentPlayer.getPlayerName();
         while (true) {
-            output.println("Please select a card to include in the attack or quit to finish the attack.");
+            output.println(playerName + " Please select a card to include in the attack or quit to finish the attack.");
             displayCurrentAdventureHand(output);
             output.println();
             output.flush();
@@ -663,6 +664,7 @@ public class Main {
         while (itr.hasNext()) {
             Player player = itr.next();
             output.println(player.getPlayerName() + ", enter 'W' to withdraw from the quest, or anything else to continue to stage " + currentQuest.getCurrentStageNumber());
+            output.flush();
             String inputStr = input.nextLine();
             if (Objects.equals(inputStr, "W")) {
                 output.println(player.getPlayerName());
