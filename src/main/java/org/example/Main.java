@@ -15,11 +15,25 @@ public class Main {
         Scanner input = new Scanner(System.in);
         PrintWriter output = new PrintWriter(System.out);
 
-        game.displayCurrentPlayer(output);
-        game.startPlayerTurn();
-        game.promptPlayer(input, output);
+        while(game.getWinningPlayersId().isEmpty()){
+            game.displayCurrentPlayer(output);
+            game.startPlayerTurn();
+            game.promptPlayer(input, output);
 
-        game.promptBuildQuest(input, output);
+            if(game.hasSponsor){
+                game.hasSponsor = false;
+                game.promptBuildQuest(input, output);
+                game.promptFinishTurn(input, output);
+
+                game.promptParticipate(input, output);
+                game.startQuest(input, output);
+            }
+
+            game.promptFinishTurn(input, output);
+            game.nextPlayer();
+        }
+
+        game.winnersPrompt(output);
     }
 
     // Decks
@@ -43,6 +57,7 @@ public class Main {
     Quest currentQuest;
     ArrayList<Card> eventDiscardPile = new ArrayList<>();
     ArrayList<Card> adventureDiscardPile = new ArrayList<>();
+    boolean hasSponsor = false;
 
 
     public static class Card {
@@ -199,6 +214,9 @@ public class Main {
             return currentStageNumber - 1;
         }
 
+        public void incrementStageNumber() {
+            currentStageNumber++;
+        }
     }
 
     public static class CardComparator implements Comparator<Card> {
@@ -241,12 +259,14 @@ public class Main {
     public Card drawEventCard() {
         Card draw;
         draw = eventDeck.removeFirst();
+        currentEventCard = draw;
         return draw;
     }
 
     public Card drawAdventureCard() {
         Card draw;
         draw = adventureDeck.removeFirst();
+        currentAdventureCard = draw;
         return draw;
     }
 
@@ -384,6 +404,11 @@ public class Main {
                 itr.remove();
             }
         }
+        if (currentQuest.getCurrentStageNumber() == currentQuest.getQuestValue()) {
+            for (Player player : participants) {
+                player.addShield(currentQuest.getQuestValue());
+            }
+        }
     }
 
     public void discardAttackCards() {
@@ -408,11 +433,13 @@ public class Main {
         ArrayList<String> winnersList = getWinningPlayersId();
         String winners = String.join(", ", winnersList);
         output.println("WINNERS: " + winners);
+        output.flush();
     }
 
     public void displayCurrentPlayer(PrintWriter output) {
         Player player = getCurrentPlayer();
         output.println("Current Player: " + player.playerName);
+        output.println("Current Shields: " + player.getShields());
         output.println("Current Hand: ");
         displayCurrentAdventureHand(output);
         output.println();
@@ -432,6 +459,12 @@ public class Main {
         output.flush();
     }
 
+    public void displayAdventureCard(PrintWriter output) {
+        String cardName = currentAdventureCard.name;
+        output.println("DRAWN CARD: " + cardName);
+        output.flush();
+    }
+
     public void displayCurrentAdventureHand(PrintWriter output) {
         Player player = getCurrentPlayer();
         for (int i = 0; i < player.getPlayerAdventureHandSize(); i++) {
@@ -445,8 +478,7 @@ public class Main {
         output.flush();
 
         input.nextLine();
-        output.print("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
-        output.flush();
+        clearScreen(output);
     }
 
     public void promptTrimHand(Scanner input, PrintWriter output) {
@@ -468,17 +500,25 @@ public class Main {
         }
     }
 
+    public void clearScreen(PrintWriter output){
+        output.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
+        output.flush();
+    }
+
     public void promptSponsorQuest(Scanner input, PrintWriter output) {
         for (int i = 0; i < playerList.size(); i++) {
             Player player = getCurrentPlayer();
             String playerName = player.getPlayerName();
-            output.println(playerName + ", enter Y to sponsor the quest");
+            displayCurrentPlayer(output);
+            output.println(playerName + ", enter Y to sponsor the quest " + currentEventCard.name);
             output.flush();
             String inputStr = input.nextLine();
             if (inputStr.equals("Y")) {
+                hasSponsor = true;
                 currentQuestSponsor = player;
                 return;
             }
+            clearScreen(output);
             nextPlayer();
         }
     }
@@ -492,8 +532,6 @@ public class Main {
         if (Objects.equals(currentEventCard.type, "Quest")) {
             promptSponsorQuest(input, output);
         }
-
-        promptFinishTurn(input, output);
     }
 
     public void promptBuildQuest(Scanner input, PrintWriter output) {
@@ -636,7 +674,7 @@ public class Main {
             if (Objects.equals(player.getPlayerName(), questSponsor.getPlayerName())) {
                 continue;
             }
-
+            displayCurrentPlayer(output);
             output.println(player.getPlayerName() + ", enter 'Y' to participate in quest, or enter anything else to decline");
             output.flush();
 
@@ -672,6 +710,49 @@ public class Main {
             }
 
         }
+    }
+
+    public void beginStage(Scanner input, PrintWriter output) {
+        ArrayList<Player> participants = currentQuest.getParticipants();
+        displayParticipants(output);
+        promptWithdraw(input, output);
+        for (Player player : participants) {
+            currentPlayer = player;
+            displayCurrentPlayer(output);
+
+            Card drawnCard = drawAdventureCard();
+            player.addAdventureCard(drawnCard);
+            displayAdventureCard(output);
+
+            promptTrimHand(input, output);
+            promptFinishTurn(input, output);
+        }
+        if (participants.isEmpty()) {
+            return;
+        }
+        for (Player player : participants) {
+            currentPlayer = player;
+            promptBuiltAttack(input, output);
+            promptFinishTurn(input, output);
+        }
+        resolveStageAttack();
+    }
+
+    public void startQuest(Scanner input, PrintWriter output) {
+        ArrayList<Player> participants = currentQuest.getParticipants();
+
+        while (currentQuest.getCurrentStageNumber() <= currentQuest.getQuestValue() && !participants.isEmpty()) {
+            beginStage(input, output);
+            currentQuest.incrementStageNumber();
+        }
+
+        output.print("WINNERS: ");
+        for (Player player : participants) {
+            output.print(player.getPlayerName() + " ");
+        }
+        output.println();
+        output.flush();
+
     }
 
     // Helper
