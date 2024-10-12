@@ -15,12 +15,12 @@ public class Main {
         Scanner input = new Scanner(System.in);
         PrintWriter output = new PrintWriter(System.out);
 
-        while(game.getWinningPlayersId().isEmpty()){
+        while (game.getWinningPlayersId().isEmpty()) {
             game.displayCurrentPlayer(output);
             game.startPlayerTurn();
             game.promptPlayer(input, output);
 
-            if(game.hasSponsor){
+            if (game.hasSponsor) {
                 game.hasSponsor = false;
                 game.promptBuildQuest(input, output);
                 game.promptFinishTurn(input, output);
@@ -500,7 +500,7 @@ public class Main {
         }
     }
 
-    public void clearScreen(PrintWriter output){
+    public void clearScreen(PrintWriter output) {
         output.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
         output.flush();
     }
@@ -674,7 +674,7 @@ public class Main {
             if (Objects.equals(player.getPlayerName(), questSponsor.getPlayerName())) {
                 continue;
             }
-            displayCurrentPlayer(output);
+
             output.println(player.getPlayerName() + ", enter 'Y' to participate in quest, or enter anything else to decline");
             output.flush();
 

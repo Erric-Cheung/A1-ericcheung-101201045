@@ -1117,6 +1117,43 @@ class MainTest {
         assertEquals(1, game.eventDiscardPile.size());
         assertTrue(game.eventDiscardPile.contains(new Main.Card("Prosperity", 0, "Event", "All players draw 2 adventure cards")));
     }
+
+    @Test
+    @DisplayName("Quest sponsor draws number cards used to sponsor quest + number of stages")
+    void RESP_22_test_01(){
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+
+        ArrayList<Main.Card> stage = new ArrayList<>();
+        stage.add(new Main.Card("F10", 10, "Foe", null));
+        stage.add(new Main.Card("D5", 5, "Weapon", null));
+        game.currentQuest.addStage(stage);
+
+        ArrayList<Main.Card> stage2 = new ArrayList<>();
+        stage2.add(new Main.Card("F10", 10, "Foe", null));
+        stage2.add(new Main.Card("D5", 5, "Weapon", null));
+        stage2.add(new Main.Card("H10", 10, "Weapon", null));
+        game.currentQuest.addStage(stage2);
+
+        ArrayList<Main.Card> stage3 = new ArrayList<>();
+        stage3.add(new Main.Card("F70", 70, "Foe", null));
+        game.currentQuest.addStage(stage3);
+
+        game.currentPlayer.adventureHand = new ArrayList<>();
+
+        StringWriter output = new StringWriter();
+        String input = "0\n0\n0\n0\n0\n0\n0\n0\n0";
+
+        // test - no participants, quest should end, should draw 6 + 3 cards
+        game.startQuest(new Scanner(input), new PrintWriter(output));
+
+        assertEquals(9, game.getCurrentPlayer().getPlayerAdventureHandSize());
+    }
 }
 
 
