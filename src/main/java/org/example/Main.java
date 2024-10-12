@@ -217,6 +217,16 @@ public class Main {
         public void incrementStageNumber() {
             currentStageNumber++;
         }
+
+        public int getNumSponsoredCards() {
+            int num = 0;
+            for (ArrayList<Card> stage : stages) {
+                for (Card card : stage) {
+                    num++;
+                }
+            }
+            return num;
+        }
     }
 
     public static class CardComparator implements Comparator<Card> {
@@ -753,6 +763,13 @@ public class Main {
         output.println();
         output.flush();
 
+        currentPlayer = currentQuest.getQuestSponsor();
+        for (int i = 0; i < currentQuest.getQuestValue() + currentQuest.getNumSponsoredCards(); i++) {
+            Card drawnCard = drawAdventureCard();
+            currentPlayer.addAdventureCard(drawnCard);
+            displayAdventureCard(output);
+        }
+        promptTrimHand(input, output);
     }
 
     // Helper
