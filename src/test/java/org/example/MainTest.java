@@ -276,6 +276,21 @@ class MainTest {
     }
 
     @Test
+    @DisplayName("Event card 'Plague' lower shields less than 0")
+    void RESP_07_test_04() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializePlayers();
+
+        Main.Player player = game.getCurrentPlayer();
+        game.eventDeck.addFirst(new Main.Card("Plague", 0, "Event", "Lose 2 shields immediately"));
+        game.startPlayerTurn();
+
+        assertEquals(0, player.getShields());
+    }
+
+
+    @Test
     @DisplayName("Drawn event card is displayed properly")
     void RESP_08_test_01() {
         Main game = new Main();
@@ -553,6 +568,7 @@ class MainTest {
         assertTrue(output.toString().contains("Insufficient value for this stage"));
     }
 
+
     @Test
     @DisplayName("Displays the selected cards associated with the stage")
     void RESP_13_test_03() {
@@ -651,6 +667,30 @@ class MainTest {
         assertTrue(output.toString().contains("Current cards in stage: F5"));
         assertTrue(output.toString().contains("Current cards in stage: F5   D5"));
         assertTrue(output.toString().contains("Current cards in stage: F20"));
+    }
+
+    @Test
+    @DisplayName("Displays 'Stage must contain one foe.'")
+    void RESP_13_test_07() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        Main.Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        game.currentQuestSponsor = game.getCurrentPlayer();
+
+        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+
+        StringWriter output = new StringWriter();
+        String input = "0\nquit\n0\nquit\n0\nquit\n0\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Stage must contain one foe"));
     }
 
     @Test

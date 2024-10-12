@@ -58,7 +58,7 @@ public class Main {
     ArrayList<Card> eventDiscardPile = new ArrayList<>();
     ArrayList<Card> adventureDiscardPile = new ArrayList<>();
     boolean hasSponsor = false;
-
+    int lastPlayerIndex;
 
     public static class Card {
         String name;
@@ -128,6 +128,9 @@ public class Main {
 
         public void removeShields(int i) {
             shields = shields - i;
+            if(shields < 0){
+                shields = 0;
+            }
         }
 
         public int getShields() {
@@ -516,6 +519,7 @@ public class Main {
     }
 
     public void promptSponsorQuest(Scanner input, PrintWriter output) {
+        lastPlayerIndex = currentPlayerIndex;
         for (int i = 0; i < playerList.size(); i++) {
             Player player = getCurrentPlayer();
             String playerName = player.getPlayerName();
@@ -526,6 +530,7 @@ public class Main {
             if (inputStr.equals("Y")) {
                 hasSponsor = true;
                 currentQuestSponsor = player;
+                currentPlayerIndex = lastPlayerIndex;
                 return;
             }
             clearScreen(output);
@@ -571,6 +576,10 @@ public class Main {
                 }
                 if (Objects.equals(inputStr, "quit") && stageValue <= prevStageValue) {
                     output.println("Insufficient value for this stage");
+                    continue;
+                }
+                if (Objects.equals(inputStr, "quit") && !containsFoe) {
+                    output.println("Stage must contain one foe");
                     continue;
                 }
                 if (Objects.equals(inputStr, "quit")) {
@@ -764,6 +773,7 @@ public class Main {
         output.flush();
 
         currentPlayer = currentQuest.getQuestSponsor();
+        displayCurrentPlayer(output);
         for (int i = 0; i < currentQuest.getQuestValue() + currentQuest.getNumSponsoredCards(); i++) {
             Card drawnCard = drawAdventureCard();
             currentPlayer.addAdventureCard(drawnCard);
