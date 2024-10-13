@@ -1160,7 +1160,7 @@ class MainTest {
 
     @Test
     @DisplayName("Quest sponsor draws number cards used to sponsor quest + number of stages")
-    void RESP_22_test_01(){
+    void RESP_22_test_01() {
         Main game = new Main();
         game.initializeAdventureDeck();
         game.initializeEventDeck();
@@ -1193,6 +1193,155 @@ class MainTest {
         game.startQuest(new Scanner(input), new PrintWriter(output));
 
         assertEquals(9, game.getCurrentPlayer().getPlayerAdventureHandSize());
+    }
+}
+
+class MainATest {
+    @Test
+    @DisplayName("A-TEST JP-Scenario")
+    void A_TEST_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        // Rigging player hands
+        game.player1.adventureHand = new ArrayList<>();
+        game.player2.adventureHand = new ArrayList<>();
+        game.player3.adventureHand = new ArrayList<>();
+        game.player4.adventureHand = new ArrayList<>();
+
+        game.player1.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player1.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player1.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
+        game.player1.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
+        game.player1.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
+        game.player1.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
+        game.player1.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
+        game.player1.addAdventureCard(new Main.Card("L20", 20, "Weapon", null));
+
+        game.player2.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player2.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player2.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
+        game.player2.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
+        game.player2.addAdventureCard(new Main.Card("F40", 40, "Foe", null));
+        game.player2.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
+        game.player2.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
+        game.player2.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player2.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player2.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
+        game.player2.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
+        game.player2.addAdventureCard(new Main.Card("E30", 30, "Weapon", null));
+
+        game.player3.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player3.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player3.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player3.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
+        game.player3.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
+        game.player3.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
+        game.player3.addAdventureCard(new Main.Card("L20", 20, "Weapon", null));
+
+        game.player4.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        game.player4.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
+        game.player4.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
+        game.player4.addAdventureCard(new Main.Card("F40", 40, "Foe", null));
+        game.player4.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
+        game.player4.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
+        game.player4.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
+        game.player4.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player4.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
+        game.player4.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
+        game.player4.addAdventureCard(new Main.Card("L20", 20, "Weapon", null));
+        game.player4.addAdventureCard(new Main.Card("E30", 30, "Weapon", null));
+
+        game.overwriteEventDeckDraw(0, new Main.Card("Q4", 4, "Quest", null));
+
+        StringWriter output;
+        String input;
+
+        game.startPlayerTurn();
+
+        output = new StringWriter();
+        input = "\nY";
+        game.promptPlayer(new Scanner(input), new PrintWriter(output));
+
+        output = new StringWriter();
+        input = "0\n6\nquit\n1\n4\nquit\n1\n2\n4\nquit\n1\n2\nquit";
+        game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
+
+        output = new StringWriter();
+        input = "\n";
+        game.promptFinishTurn(new Scanner(input), new PrintWriter(output));
+
+        output = new StringWriter();
+        input = "Y\nY\nY\n";
+        game.promptParticipate(new Scanner(input), new PrintWriter(output));
+
+        game.overwriteAdventureDeckDraw(0, new Main.Card("F30", 30, "Foe", null));
+        game.overwriteAdventureDeckDraw(1,new Main.Card("S10", 10, "Weapon", null));
+        game.overwriteAdventureDeckDraw(2,new Main.Card("B15", 15, "Weapon", null));
+        output = new StringWriter();
+        input = "\n\n\n0\n\n0\n\n0\n\n4\n4\nquit\n\n4\n3\nquit\n\n4\n5\nquit\n\n";
+        game.beginStage(new Scanner(input), new PrintWriter(output));
+
+        game.currentQuest.incrementStageNumber();
+        game.overwriteAdventureDeckDraw(0, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureDeckDraw(1,new Main.Card("L20", 20, "Weapon", null));
+        game.overwriteAdventureDeckDraw(2,new Main.Card("L20", 20, "Weapon", null));
+        output = new StringWriter();
+        input = "\n\n\n\n\n\n6\n5\nquit\n\n8\n3\nquit\n\n5\n5\nquit\n\n";
+        game.beginStage(new Scanner(input), new PrintWriter(output));
+
+        // Assert P1 has no shields and has correct hand
+        output = new StringWriter();
+        game.currentPlayer = game.player1;
+        game.displayCurrentPlayer(new PrintWriter(output));
+        assertEquals(0, game.player1.getShields());
+        assertTrue(output.toString().contains("0.F5   1.F10   2.F15   3.F15   4.F30   5.H10   6.B15   7.B15   8.L20"));
+
+        game.currentQuest.incrementStageNumber();
+        game.overwriteAdventureDeckDraw(0, new Main.Card("B15", 15, "Weapon", null));
+        game.overwriteAdventureDeckDraw(1, new Main.Card("S10", 10, "Weapon", null));
+        output = new StringWriter();
+        input = "\n\n\n\n8\n6\n4\nquit\n\n6\n4\n6\nquit\n\n";
+        game.beginStage(new Scanner(input), new PrintWriter(output));
+
+        game.currentQuest.incrementStageNumber();
+        game.overwriteAdventureDeckDraw(0, new Main.Card("F30", 30, "Foe", null));
+        game.overwriteAdventureDeckDraw(1, new Main.Card("L20", 20, "Weapon", null));
+        output = new StringWriter();
+        input = "\n\n\n\n6\n5\n5\nquit\n\n3\n3\n3\n4\nquit\n\n";
+        game.beginStage(new Scanner(input), new PrintWriter(output));
+
+        // Assert P3 has no shields and has correct hand
+        output = new StringWriter();
+        game.currentPlayer = game.player3;
+        game.displayCurrentPlayer(new PrintWriter(output));
+        assertEquals(0, game.player3.getShields());
+        assertTrue(output.toString().contains("0.F5   1.F5   2.F15   3.F30   4.S10"));
+
+        // Assert P4 has 4 shields and has correct hand
+        output = new StringWriter();
+        game.currentPlayer = game.player4;
+        game.displayCurrentPlayer(new PrintWriter(output));
+        assertEquals(4, game.player4.getShields());
+        assertTrue(output.toString().contains("0.F15   1.F15   2.F40   3.L20"));
+
+        output = new StringWriter();
+        input = "0\n0\n0\n0\n";
+        game.resolveQuest(new Scanner(input), new PrintWriter(output));
+
+        // Assert P4 has 4 shields and has correct hand
+        assertEquals(12, game.player2.getPlayerAdventureHandSize());
     }
 }
 
