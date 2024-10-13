@@ -1194,6 +1194,44 @@ class MainTest {
 
         assertEquals(9, game.getCurrentPlayer().getPlayerAdventureHandSize());
     }
+
+    @Test
+    @DisplayName("Adventure card deck runs out and discard pile is reused")
+    void RESP_23_test_01() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        // Rig discard pile to contain deck
+        int adventureDeckSize = game.getAdventureDeckSize();
+        for (int i = 0; i < adventureDeckSize; i++) {
+            Main.Card card = game.drawAdventureCard();
+            game.adventureDiscardPile.add(card);
+        }
+
+        game.drawAdventureCard();
+        assertEquals(adventureDeckSize - 1, game.getAdventureDeckSize());
+    }
+
+    @Test
+    @DisplayName("Adventure card deck runs out and discard pile is reused")
+    void RESP_23_test_02() {
+        Main game = new Main();
+        game.initializeAdventureDeck();
+        game.initializeEventDeck();
+        game.initializePlayers();
+
+        // Rig discard pile to contain deck
+        int eventDeckSize = game.getEventDeckSize();
+        for (int i = 0; i < eventDeckSize; i++) {
+            Main.Card card = game.drawEventCard();
+            game.eventDiscardPile.add(card);
+        }
+
+        game.drawEventCard();
+        assertEquals(eventDeckSize - 1, game.getEventDeckSize());
+    }
 }
 
 class MainATest {
@@ -1287,16 +1325,16 @@ class MainATest {
         game.promptParticipate(new Scanner(input), new PrintWriter(output));
 
         game.overwriteAdventureDeckDraw(0, new Main.Card("F30", 30, "Foe", null));
-        game.overwriteAdventureDeckDraw(1,new Main.Card("S10", 10, "Weapon", null));
-        game.overwriteAdventureDeckDraw(2,new Main.Card("B15", 15, "Weapon", null));
+        game.overwriteAdventureDeckDraw(1, new Main.Card("S10", 10, "Weapon", null));
+        game.overwriteAdventureDeckDraw(2, new Main.Card("B15", 15, "Weapon", null));
         output = new StringWriter();
         input = "\n\n\n0\n\n0\n\n0\n\n4\n4\nquit\n\n4\n3\nquit\n\n4\n5\nquit\n\n";
         game.beginStage(new Scanner(input), new PrintWriter(output));
 
         game.currentQuest.incrementStageNumber();
         game.overwriteAdventureDeckDraw(0, new Main.Card("F10", 10, "Foe", null));
-        game.overwriteAdventureDeckDraw(1,new Main.Card("L20", 20, "Weapon", null));
-        game.overwriteAdventureDeckDraw(2,new Main.Card("L20", 20, "Weapon", null));
+        game.overwriteAdventureDeckDraw(1, new Main.Card("L20", 20, "Weapon", null));
+        game.overwriteAdventureDeckDraw(2, new Main.Card("L20", 20, "Weapon", null));
         output = new StringWriter();
         input = "\n\n\n\n\n\n6\n5\nquit\n\n8\n3\nquit\n\n5\n5\nquit\n\n";
         game.beginStage(new Scanner(input), new PrintWriter(output));

@@ -270,6 +270,9 @@ public class Main {
     }
 
     public Card drawEventCard() {
+        if(eventDeck.isEmpty()){
+            return null;
+        }
         Card draw;
         draw = eventDeck.removeFirst();
         currentEventCard = draw;
@@ -277,6 +280,9 @@ public class Main {
     }
 
     public Card drawAdventureCard() {
+        if(adventureDeck.isEmpty()){
+            return null;
+        }
         Card draw;
         draw = adventureDeck.removeFirst();
         currentAdventureCard = draw;
