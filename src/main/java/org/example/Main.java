@@ -271,7 +271,8 @@ public class Main {
 
     public Card drawEventCard() {
         if(eventDeck.isEmpty()){
-            return null;
+            eventDeck.addAll(eventDiscardPile);
+            Collections.shuffle(eventDeck);
         }
         Card draw;
         draw = eventDeck.removeFirst();
@@ -281,7 +282,8 @@ public class Main {
 
     public Card drawAdventureCard() {
         if(adventureDeck.isEmpty()){
-            return null;
+            adventureDeck.addAll(adventureDiscardPile);
+            Collections.shuffle(adventureDeck);
         }
         Card draw;
         draw = adventureDeck.removeFirst();
