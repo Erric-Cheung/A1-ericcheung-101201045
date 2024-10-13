@@ -128,7 +128,7 @@ public class Main {
 
         public void removeShields(int i) {
             shields = shields - i;
-            if(shields < 0){
+            if (shields < 0) {
                 shields = 0;
             }
         }
@@ -422,10 +422,11 @@ public class Main {
                 player.addShield(currentQuest.getQuestValue());
             }
         }
+        discardAttackCards();
     }
 
     public void discardAttackCards() {
-        for (Player player : currentQuest.participants) {
+        for (Player player : playerList) {
             adventureDiscardPile.addAll(player.getAttack());
         }
     }
@@ -440,6 +441,7 @@ public class Main {
         Card card = player.removeAdventureCard(index);
         adventureDiscardPile.add(card);
     }
+
 
     // Interface
     public void winnersPrompt(PrintWriter output) {
@@ -765,12 +767,23 @@ public class Main {
             currentQuest.incrementStageNumber();
         }
 
-        output.print("WINNERS: ");
-        for (Player player : participants) {
-            output.print(player.getPlayerName() + " ");
+        resolveQuest(input, output);
+    }
+
+    public void resolveQuest(Scanner input, PrintWriter output){
+        ArrayList<Player> participants = currentQuest.getParticipants();
+
+        if(participants.isEmpty()){
+            output.println("WINNERS: None");
         }
-        output.println();
-        output.flush();
+        else {
+            output.print("WINNERS: ");
+            for (Player player : currentQuest.getParticipants()) {
+                output.print(player.getPlayerName() + " ");
+            }
+            output.println();
+            output.flush();
+        }
 
         currentPlayer = currentQuest.getQuestSponsor();
         displayCurrentPlayer(output);
@@ -787,5 +800,13 @@ public class Main {
     public void overwriteAdventureHand(Player player, int index, Card card) {
         player.adventureHand.remove(index);
         player.adventureHand.add(index, card);
+    }
+
+    public void overwriteAdventureDeckDraw(int index, Card card) {
+        adventureDeck.add(index, card);
+    }
+
+    public void overwriteEventDeckDraw(int index, Card card) {
+        eventDeck.add(index, card);
     }
 }
