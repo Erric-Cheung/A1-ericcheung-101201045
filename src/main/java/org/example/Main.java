@@ -60,178 +60,6 @@ public class Main {
     boolean hasSponsor = false;
     int lastPlayerIndex;
 
-    public static class Card {
-        String name;
-        String type;
-        int value;
-        String effect;
-
-        public Card(String name, int value, String type, String effect) {
-            this.name = name;
-            this.value = value;
-            this.type = type;
-            this.effect = effect;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Card other = (Card) obj;
-            if (this.name == null) {
-                return other.name == null;
-            } else return this.name.equals(other.name);
-        }
-    }
-
-    public static class Player {
-        String playerName;
-        ArrayList<Card> adventureHand;
-        ArrayList<Card> attackHand;
-        int shields;
-
-        public Player(String name) {
-            this.playerName = name;
-            shields = 0;
-            adventureHand = new ArrayList<>();
-            attackHand = new ArrayList<>();
-        }
-
-        public void addAdventureCard(Card card) {
-            adventureHand.add(card);
-            adventureHand.sort(new CardComparator());
-        }
-
-        public Card removeAdventureCard(int i) {
-            return adventureHand.remove(i);
-        }
-
-        public Card getAdventureCard(int index) {
-            return adventureHand.get(index);
-        }
-
-        public void setAdventureHand(ArrayList<Card> hand) {
-            adventureHand = hand;
-        }
-
-        public int getPlayerAdventureHandSize() {
-            return adventureHand.size();
-        }
-
-        public void addShield(int i) {
-            shields = shields + i;
-        }
-
-        public void removeShields(int i) {
-            shields = shields - i;
-            if (shields < 0) {
-                shields = 0;
-            }
-        }
-
-        public int getShields() {
-            return shields;
-        }
-
-        public String getPlayerName() {
-            return playerName;
-        }
-
-        public ArrayList<Card> getAttack() {
-            return attackHand;
-        }
-
-        public int getAttackValue() {
-            int value = 0;
-            for (Card card : attackHand) {
-                value = value + card.value;
-            }
-            return value;
-        }
-
-        public void setAttack(ArrayList<Card> attack) {
-            this.attackHand = attack;
-        }
-
-
-    }
-
-    public static class Quest {
-        int questValue;
-        Player questSponsor;
-        ArrayList<ArrayList<Card>> stages;
-        ArrayList<Player> participants;
-        int currentStageNumber;
-
-        public Quest(Player player, Card questCard) {
-            stages = new ArrayList<>();
-            participants = new ArrayList<>();
-            questValue = questCard.value;
-            questSponsor = player;
-            currentStageNumber = 1;
-        }
-
-        public void addStage(ArrayList<Card> stage) {
-            stages.addLast(stage);
-        }
-
-        public ArrayList<Card> getStage(int index) {
-            return stages.get(index);
-        }
-
-        public int getStageValue(int index) {
-            int totalValue = 0;
-            ArrayList<Card> stage = getStage(index);
-            for (Card card : stage) {
-                totalValue = totalValue + card.value;
-            }
-
-            return totalValue;
-        }
-
-        public int getQuestValue() {
-            return questValue;
-        }
-
-        public Player getQuestSponsor() {
-            return questSponsor;
-        }
-
-        public void addParticipant(Player player) {
-            participants.add(player);
-        }
-
-        public ArrayList<Player> getParticipants() {
-            return participants;
-        }
-
-        public int getCurrentStageNumber() {
-            return currentStageNumber;
-        }
-
-        public int getCurrentStageIndex() {
-            return currentStageNumber - 1;
-        }
-
-        public void incrementStageNumber() {
-            currentStageNumber++;
-        }
-
-        public int getNumSponsoredCards() {
-            int num = 0;
-            for (ArrayList<Card> stage : stages) {
-                for (Card card : stage) {
-                    num++;
-                }
-            }
-            return num;
-        }
-    }
-
     public static class CardComparator implements Comparator<Card> {
         @Override
         public int compare(Card c1, Card c2) {
@@ -269,8 +97,18 @@ public class Main {
         }
     }
 
+    public Player getPlayer(String playerName) {
+        for(Player player : playerList){
+            if(Objects.equals(player.getPlayerName(), playerName)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+
     public Card drawEventCard() {
-        if(eventDeck.isEmpty()){
+        if (eventDeck.isEmpty()) {
             eventDeck.addAll(eventDiscardPile);
             Collections.shuffle(eventDeck);
         }
@@ -281,7 +119,7 @@ public class Main {
     }
 
     public Card drawAdventureCard() {
-        if(adventureDeck.isEmpty()){
+        if (adventureDeck.isEmpty()) {
             adventureDeck.addAll(adventureDiscardPile);
             Collections.shuffle(adventureDeck);
         }
@@ -778,13 +616,12 @@ public class Main {
         resolveQuest(input, output);
     }
 
-    public void resolveQuest(Scanner input, PrintWriter output){
+    public void resolveQuest(Scanner input, PrintWriter output) {
         ArrayList<Player> participants = currentQuest.getParticipants();
 
-        if(participants.isEmpty()){
+        if (participants.isEmpty()) {
             output.println("WINNERS: None");
-        }
-        else {
+        } else {
             output.print("WINNERS: ");
             for (Player player : currentQuest.getParticipants()) {
                 output.print(player.getPlayerName() + " ");

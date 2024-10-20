@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
@@ -29,7 +30,7 @@ class MainTest {
         }
 
         for (int i = 0; i < deckSize; i++) {
-            Main.Card newCard = game.drawAdventureCard();
+            Card newCard = game.drawAdventureCard();
 
             if (cardCountMap.containsKey(newCard.name)) {
                 cardCountMap.put(newCard.name, cardCountMap.get(newCard.name) + 1);
@@ -73,7 +74,7 @@ class MainTest {
         }
 
         for (int i = 0; i < deckSize; i++) {
-            Main.Card newCard = game.drawEventCard();
+            Card newCard = game.drawEventCard();
 
             if (cardCountMap.containsKey(newCard.name)) {
                 cardCountMap.put(newCard.name, cardCountMap.get(newCard.name) + 1);
@@ -190,14 +191,14 @@ class MainTest {
         StringWriter output = new StringWriter();
 
         // Rig deck
-        Main.Player player = game.getCurrentPlayer();
-        Main.Card card1 = new Main.Card("F10", 10, "Foe", null);
-        Main.Card card7 = new Main.Card("D5", 5, "Weapon", null);
-        Main.Card card2 = new Main.Card("F5", 5, "Foe", null);
-        Main.Card card3 = new Main.Card("F70", 70, "Foe", null);
-        Main.Card card4 = new Main.Card("L20", 20, "Weapon", null);
-        Main.Card card5 = new Main.Card("H10", 10, "Weapon", null);
-        Main.Card card6 = new Main.Card("S10", 10, "Weapon", null);
+        Player player = game.getCurrentPlayer();
+        Card card1 = new Card("F10", 10, "Foe", null);
+        Card card7 = new Card("D5", 5, "Weapon", null);
+        Card card2 = new Card("F5", 5, "Foe", null);
+        Card card3 = new Card("F70", 70, "Foe", null);
+        Card card4 = new Card("L20", 20, "Weapon", null);
+        Card card5 = new Card("H10", 10, "Weapon", null);
+        Card card6 = new Card("S10", 10, "Weapon", null);
 
         player.adventureHand = new ArrayList<>();
         player.addAdventureCard(card1);
@@ -227,10 +228,10 @@ class MainTest {
         game.initializePlayers();
 
         // test 1 - player loses two shields after drawing event card
-        Main.Player player = game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         player.addShield(3);
 
-        game.eventDeck.addFirst(new Main.Card("Plague", 0, "Event", "Lose 2 shields immediately"));
+        game.eventDeck.addFirst(new Card("Plague", 0, "Event", "Lose 2 shields immediately"));
         game.startPlayerTurn();
 
         assertEquals(1, player.getShields());
@@ -245,10 +246,10 @@ class MainTest {
 
 
         // test 2 - player gains two adventure cards after drawing event card
-        Main.Player player = game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         player.setAdventureHand(new ArrayList<>());
 
-        game.eventDeck.addFirst(new Main.Card("Queen's favor", 0, "Event", "Draw 2 adventure cards"));
+        game.eventDeck.addFirst(new Card("Queen's favor", 0, "Event", "Draw 2 adventure cards"));
         game.startPlayerTurn();
 
         assertEquals(2, player.getPlayerAdventureHandSize());
@@ -262,11 +263,11 @@ class MainTest {
         game.initializePlayers();
 
         // test 2 - all players gains two adventure cards after drawing event card
-        for (Main.Player player : game.playerList) {
+        for (Player player : game.playerList) {
             player.setAdventureHand(new ArrayList<>());
         }
 
-        game.eventDeck.addFirst(new Main.Card("Prosperity", 0, "Event", "All players draw 2 adventure cards"));
+        game.eventDeck.addFirst(new Card("Prosperity", 0, "Event", "All players draw 2 adventure cards"));
         game.startPlayerTurn();
 
         assertTrue(game.player1.getPlayerAdventureHandSize() == 2 &&
@@ -282,8 +283,8 @@ class MainTest {
         game.initializeAdventureDeck();
         game.initializePlayers();
 
-        Main.Player player = game.getCurrentPlayer();
-        game.eventDeck.addFirst(new Main.Card("Plague", 0, "Event", "Lose 2 shields immediately"));
+        Player player = game.getCurrentPlayer();
+        game.eventDeck.addFirst(new Card("Plague", 0, "Event", "Lose 2 shields immediately"));
         game.startPlayerTurn();
 
         assertEquals(0, player.getShields());
@@ -301,7 +302,7 @@ class MainTest {
 
         StringWriter output = new StringWriter();
 
-        game.eventDeck.addFirst(new Main.Card("Plague", 0, "Event", "Lose 2 shields immediately"));
+        game.eventDeck.addFirst(new Card("Plague", 0, "Event", "Lose 2 shields immediately"));
         game.startPlayerTurn();
         game.displayEventCard(new PrintWriter(output));
 
@@ -334,11 +335,11 @@ class MainTest {
         game.initializeAdventureDeck();
         game.initializePlayers();
 
-        Main.Player player = game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
 
         // 14 cards in current player's hand
-        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Card("F5", 5, "Foe", null));
 
         // test - Should trim card the first and last position of hand
 
@@ -357,15 +358,15 @@ class MainTest {
         game.initializeAdventureDeck();
         game.initializePlayers();
 
-        Main.Player player = game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
 
         // 14 cards in current player's hand
-        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Card("F5", 5, "Foe", null));
 
         // test - first and last card with names TEST_CARD should be trimmed from deck
-        game.overwriteAdventureHand(player, 0, new Main.Card("TEST_CARD", 5, "Foe", null));
-        game.overwriteAdventureHand(player, 13, new Main.Card("TEST_CARD", 5, "Foe", null));
+        game.overwriteAdventureHand(player, 0, new Card("TEST_CARD", 5, "Foe", null));
+        game.overwriteAdventureHand(player, 13, new Card("TEST_CARD", 5, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "13\n0";
@@ -382,11 +383,11 @@ class MainTest {
         game.initializeAdventureDeck();
         game.initializePlayers();
 
-        Main.Player player = game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
 
         // 14 cards in current player's hand
-        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        player.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Card("F5", 5, "Foe", null));
+        player.addAdventureCard(new Card("F5", 5, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "13\n0";
@@ -407,10 +408,10 @@ class MainTest {
 
         game.nextPlayer();
 
-        Main.Player player = game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         String currentPlayerName = player.playerName;
 
-        game.eventDeck.addFirst(new Main.Card("Q4", 4, "Quest", null));
+        game.eventDeck.addFirst(new Card("Q4", 4, "Quest", null));
         game.startPlayerTurn();
 
         StringWriter output = new StringWriter();
@@ -429,7 +430,7 @@ class MainTest {
         game.initializePlayers();
 
         game.nextPlayer();
-        game.eventDeck.addFirst(new Main.Card("Q4", 4, "Quest", null));
+        game.eventDeck.addFirst(new Card("Q4", 4, "Quest", null));
         game.startPlayerTurn();
 
         // test - players decline sponsor and next player is asked
@@ -453,7 +454,7 @@ class MainTest {
 
         // test - After
 
-        game.eventDeck.addFirst(new Main.Card("Q4", 4, "Quest", null));
+        game.eventDeck.addFirst(new Card("Q4", 4, "Quest", null));
         game.startPlayerTurn();
 
         StringWriter output = new StringWriter();
@@ -477,14 +478,14 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
@@ -503,14 +504,14 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
@@ -529,14 +530,14 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "quit\n0\nquit\n0\n0\nquit\n0\nquit";
@@ -552,14 +553,14 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "quit\n0\nquit\n0\nquit\n0\nquit\n0\nquit";
@@ -577,14 +578,14 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
@@ -601,15 +602,15 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 4, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 4, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\n1\nquit\n1\nquit";
@@ -626,15 +627,15 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 4, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 4, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\n0\nquit\n1\nquit";
@@ -651,14 +652,14 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
@@ -677,14 +678,14 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D10", 10, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\nquit\n0\nquit\n0\nquit";
@@ -701,20 +702,20 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
         game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
 
-        Main.Quest quest = game.currentQuest;
+        Quest quest = game.currentQuest;
         assertEquals(3, quest.stages.size());
     }
 
@@ -726,19 +727,19 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit\n0\n0\nquit\n0\nquit";
         game.promptBuildQuest(new Scanner(input), new PrintWriter(output));
 
-        Main.Quest quest = game.currentQuest;
+        Quest quest = game.currentQuest;
 
         assertEquals(5, quest.getStageValue(0));
         assertEquals(10, quest.getStageValue(1));
@@ -753,12 +754,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "1\nquit";
@@ -776,12 +777,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("F20", 20, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("F20", 20, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "quit";
@@ -798,12 +799,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("H10", 10, "Weapon", null));
 
         StringWriter output = new StringWriter();
         String input = "2\n2\nquit";
@@ -820,12 +821,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("H10", 10, "Weapon", null));
 
         StringWriter output = new StringWriter();
         String input = "1\n1\nquit";
@@ -842,12 +843,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("H10", 10, "Weapon", null));
 
         StringWriter output = new StringWriter();
         String input = "0\nquit";
@@ -864,12 +865,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("H10", 10, "Weapon", null));
 
         StringWriter output = new StringWriter();
         String input = "2\n2\nquit";
@@ -886,12 +887,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("H10", 10, "Weapon", null));
 
         StringWriter output = new StringWriter();
         String input = "2\n2\nquit";
@@ -908,12 +909,12 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player currentPlayer = game.getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
-        game.overwriteAdventureHand(currentPlayer, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(currentPlayer, 1, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 2, new Main.Card("D5", 5, "Weapon", null));
-        game.overwriteAdventureHand(currentPlayer, 3, new Main.Card("H10", 10, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(currentPlayer, 1, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 2, new Card("D5", 5, "Weapon", null));
+        game.overwriteAdventureHand(currentPlayer, 3, new Card("H10", 10, "Weapon", null));
 
         StringWriter output = new StringWriter();
         String input = "2\n2\nquit";
@@ -933,10 +934,10 @@ class MainTest {
         game.initializePlayers();
 
         game.nextPlayer();
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = currentPlayer;
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         StringWriter output = new StringWriter();
         String input = "Y\nY\nY";
@@ -957,10 +958,10 @@ class MainTest {
         game.initializePlayers();
 
         game.nextPlayer();
-        Main.Player currentPlayer = game.getCurrentPlayer();
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
+        Player currentPlayer = game.getCurrentPlayer();
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
         game.currentQuestSponsor = currentPlayer;
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         StringWriter output = new StringWriter();
         String input = "Y\nN\nY";
@@ -979,8 +980,8 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         game.currentQuest.addParticipant(game.player1);
         game.currentQuest.addParticipant(game.player3);
@@ -1006,8 +1007,8 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         game.currentQuest.addParticipant(game.player1);
         game.currentQuest.addParticipant(game.player3);
@@ -1019,7 +1020,7 @@ class MainTest {
 
         game.promptWithdraw(new Scanner(input), new PrintWriter(output));
 
-        ArrayList<Main.Player> participants = game.currentQuest.getParticipants();
+        ArrayList<Player> participants = game.currentQuest.getParticipants();
         assertFalse(participants.contains(game.player3));
         assertTrue(participants.contains(game.player1));
         assertTrue(participants.contains(game.player4));
@@ -1033,23 +1034,23 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         game.currentQuest.addParticipant(game.player1);
         game.currentQuest.addParticipant(game.player3);
         game.currentQuest.addParticipant(game.player4);
 
-        ArrayList<Main.Card> stage = new ArrayList<>();
-        stage.add(new Main.Card("F10", 10, "Foe", null));
+        ArrayList<Card> stage = new ArrayList<>();
+        stage.add(new Card("F10", 10, "Foe", null));
         game.currentQuest.addStage(stage);
 
-        ArrayList<Main.Card> attack1 = new ArrayList<>();
-        attack1.add(new Main.Card("H10", 10, "Weapon", null));
+        ArrayList<Card> attack1 = new ArrayList<>();
+        attack1.add(new Card("H10", 10, "Weapon", null));
         game.player1.setAttack(attack1);
 
-        ArrayList<Main.Card> attack2 = new ArrayList<>();
-        attack2.add(new Main.Card("D5", 5, "Weapon", null));
+        ArrayList<Card> attack2 = new ArrayList<>();
+        attack2.add(new Card("D5", 5, "Weapon", null));
         game.player3.setAttack(attack2);
 
         // test - P1 is the only attack that beats the stage, eligible participants after attack are P1
@@ -1067,25 +1068,25 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
         game.currentQuest.addParticipant(game.player1);
         game.currentQuest.addParticipant(game.player3);
 
-        ArrayList<Main.Card> attack1 = new ArrayList<>();
-        attack1.add(new Main.Card("H10", 10, "Weapon", null));
-        attack1.add(new Main.Card("D5", 5, "Weapon", null));
+        ArrayList<Card> attack1 = new ArrayList<>();
+        attack1.add(new Card("H10", 10, "Weapon", null));
+        attack1.add(new Card("D5", 5, "Weapon", null));
         game.player1.setAttack(attack1);
 
-        ArrayList<Main.Card> attack2 = new ArrayList<>();
-        attack2.add(new Main.Card("D5", 5, "Weapon", null));
+        ArrayList<Card> attack2 = new ArrayList<>();
+        attack2.add(new Card("D5", 5, "Weapon", null));
         game.player3.setAttack(attack2);
 
         game.discardAttackCards();
         assertEquals(3, game.adventureDiscardPile.size());
-        assertTrue(game.adventureDiscardPile.contains(new Main.Card("D5", 5, "Weapon", null)));
-        assertTrue(game.adventureDiscardPile.contains(new Main.Card("H10", 10, "Weapon", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Card("D5", 5, "Weapon", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Card("H10", 10, "Weapon", null)));
     }
 
     @Test
@@ -1096,28 +1097,28 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
-        ArrayList<Main.Card> stage1 = new ArrayList<>();
-        stage1.add(new Main.Card("F10", 10, "Foe", null));
+        ArrayList<Card> stage1 = new ArrayList<>();
+        stage1.add(new Card("F10", 10, "Foe", null));
         game.currentQuest.addStage(stage1);
 
-        ArrayList<Main.Card> stage2 = new ArrayList<>();
-        stage2.add(new Main.Card("F10", 10, "Foe", null));
-        stage2.add(new Main.Card("H10", 10, "Weapon", null));
+        ArrayList<Card> stage2 = new ArrayList<>();
+        stage2.add(new Card("F10", 10, "Foe", null));
+        stage2.add(new Card("H10", 10, "Weapon", null));
         game.currentQuest.addStage(stage2);
 
-        ArrayList<Main.Card> stage3 = new ArrayList<>();
-        stage3.add(new Main.Card("F70", 70, "Foe", null));
+        ArrayList<Card> stage3 = new ArrayList<>();
+        stage3.add(new Card("F70", 70, "Foe", null));
         game.currentQuest.addStage(stage3);
 
         game.discardSponsorCards();
 
         assertEquals(4, game.adventureDiscardPile.size());
-        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F10", 10, "Foe", null)));
-        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F70", 70, "Foe", null)));
-        assertTrue(game.adventureDiscardPile.contains(new Main.Card("H10", 10, "Weapon", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Card("F10", 10, "Foe", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Card("F70", 70, "Foe", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Card("H10", 10, "Weapon", null)));
     }
 
     @Test
@@ -1128,19 +1129,19 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        Main.Player player = game.getCurrentPlayer();
+        Player player = game.getCurrentPlayer();
         player.addAdventureCard(game.drawAdventureCard());
         player.addAdventureCard(game.drawAdventureCard());
-        game.overwriteAdventureHand(player, 0, new Main.Card("F5", 5, "Foe", null));
-        game.overwriteAdventureHand(player, 1, new Main.Card("F10", 10, "Foe", null));
+        game.overwriteAdventureHand(player, 0, new Card("F5", 5, "Foe", null));
+        game.overwriteAdventureHand(player, 1, new Card("F10", 10, "Foe", null));
 
         StringWriter output = new StringWriter();
         String input = "0\n0";
 
         game.promptTrimHand(new Scanner(input), new PrintWriter(output));
         assertEquals(2, game.adventureDiscardPile.size());
-        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F10", 10, "Foe", null)));
-        assertTrue(game.adventureDiscardPile.contains(new Main.Card("F5", 5, "Foe", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Card("F10", 10, "Foe", null)));
+        assertTrue(game.adventureDiscardPile.contains(new Card("F5", 5, "Foe", null)));
     }
 
     @Test
@@ -1151,11 +1152,11 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        game.eventDeck.addFirst(new Main.Card("Prosperity", 0, "Event", "All players draw 2 adventure cards"));
+        game.eventDeck.addFirst(new Card("Prosperity", 0, "Event", "All players draw 2 adventure cards"));
         game.startPlayerTurn();
 
         assertEquals(1, game.eventDiscardPile.size());
-        assertTrue(game.eventDiscardPile.contains(new Main.Card("Prosperity", 0, "Event", "All players draw 2 adventure cards")));
+        assertTrue(game.eventDiscardPile.contains(new Card("Prosperity", 0, "Event", "All players draw 2 adventure cards")));
     }
 
     @Test
@@ -1166,22 +1167,22 @@ class MainTest {
         game.initializeEventDeck();
         game.initializePlayers();
 
-        game.currentEventCard = new Main.Card("Q3", 3, "Quest", null);
-        game.currentQuest = new Main.Quest(game.getCurrentPlayer(), game.currentEventCard);
+        game.currentEventCard = new Card("Q3", 3, "Quest", null);
+        game.currentQuest = new Quest(game.getCurrentPlayer(), game.currentEventCard);
 
-        ArrayList<Main.Card> stage = new ArrayList<>();
-        stage.add(new Main.Card("F10", 10, "Foe", null));
-        stage.add(new Main.Card("D5", 5, "Weapon", null));
+        ArrayList<Card> stage = new ArrayList<>();
+        stage.add(new Card("F10", 10, "Foe", null));
+        stage.add(new Card("D5", 5, "Weapon", null));
         game.currentQuest.addStage(stage);
 
-        ArrayList<Main.Card> stage2 = new ArrayList<>();
-        stage2.add(new Main.Card("F10", 10, "Foe", null));
-        stage2.add(new Main.Card("D5", 5, "Weapon", null));
-        stage2.add(new Main.Card("H10", 10, "Weapon", null));
+        ArrayList<Card> stage2 = new ArrayList<>();
+        stage2.add(new Card("F10", 10, "Foe", null));
+        stage2.add(new Card("D5", 5, "Weapon", null));
+        stage2.add(new Card("H10", 10, "Weapon", null));
         game.currentQuest.addStage(stage2);
 
-        ArrayList<Main.Card> stage3 = new ArrayList<>();
-        stage3.add(new Main.Card("F70", 70, "Foe", null));
+        ArrayList<Card> stage3 = new ArrayList<>();
+        stage3.add(new Card("F70", 70, "Foe", null));
         game.currentQuest.addStage(stage3);
 
         game.currentPlayer.adventureHand = new ArrayList<>();
@@ -1206,7 +1207,7 @@ class MainTest {
         // Rig discard pile to contain deck
         int adventureDeckSize = game.getAdventureDeckSize();
         for (int i = 0; i < adventureDeckSize; i++) {
-            Main.Card card = game.drawAdventureCard();
+            Card card = game.drawAdventureCard();
             game.adventureDiscardPile.add(card);
         }
 
@@ -1225,7 +1226,7 @@ class MainTest {
         // Rig discard pile to contain deck
         int eventDeckSize = game.getEventDeckSize();
         for (int i = 0; i < eventDeckSize; i++) {
-            Main.Card card = game.drawEventCard();
+            Card card = game.drawEventCard();
             game.eventDiscardPile.add(card);
         }
 
@@ -1249,59 +1250,59 @@ class MainATest {
         game.player3.adventureHand = new ArrayList<>();
         game.player4.adventureHand = new ArrayList<>();
 
-        game.player1.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player1.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player1.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
-        game.player1.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
-        game.player1.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
-        game.player1.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
-        game.player1.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
-        game.player1.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player1.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player1.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
-        game.player1.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
-        game.player1.addAdventureCard(new Main.Card("L20", 20, "Weapon", null));
+        game.player1.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player1.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player1.addAdventureCard(new Card("F15", 15, "Foe", null));
+        game.player1.addAdventureCard(new Card("F15", 15, "Foe", null));
+        game.player1.addAdventureCard(new Card("D5", 5, "Weapon", null));
+        game.player1.addAdventureCard(new Card("S10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Card("S10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player1.addAdventureCard(new Card("B15", 15, "Weapon", null));
+        game.player1.addAdventureCard(new Card("B15", 15, "Weapon", null));
+        game.player1.addAdventureCard(new Card("L20", 20, "Weapon", null));
 
-        game.player2.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player2.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player2.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
-        game.player2.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
-        game.player2.addAdventureCard(new Main.Card("F40", 40, "Foe", null));
-        game.player2.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
-        game.player2.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
-        game.player2.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player2.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player2.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
-        game.player2.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
-        game.player2.addAdventureCard(new Main.Card("E30", 30, "Weapon", null));
+        game.player2.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player2.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player2.addAdventureCard(new Card("F15", 15, "Foe", null));
+        game.player2.addAdventureCard(new Card("F15", 15, "Foe", null));
+        game.player2.addAdventureCard(new Card("F40", 40, "Foe", null));
+        game.player2.addAdventureCard(new Card("D5", 5, "Weapon", null));
+        game.player2.addAdventureCard(new Card("S10", 10, "Weapon", null));
+        game.player2.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player2.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player2.addAdventureCard(new Card("B15", 15, "Weapon", null));
+        game.player2.addAdventureCard(new Card("B15", 15, "Weapon", null));
+        game.player2.addAdventureCard(new Card("E30", 30, "Weapon", null));
 
-        game.player3.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player3.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player3.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player3.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
-        game.player3.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
-        game.player3.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
-        game.player3.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
-        game.player3.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
-        game.player3.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player3.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player3.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
-        game.player3.addAdventureCard(new Main.Card("L20", 20, "Weapon", null));
+        game.player3.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player3.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player3.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player3.addAdventureCard(new Card("F15", 15, "Foe", null));
+        game.player3.addAdventureCard(new Card("D5", 5, "Weapon", null));
+        game.player3.addAdventureCard(new Card("S10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Card("S10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Card("S10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player3.addAdventureCard(new Card("B15", 15, "Weapon", null));
+        game.player3.addAdventureCard(new Card("L20", 20, "Weapon", null));
 
-        game.player4.addAdventureCard(new Main.Card("F5", 5, "Foe", null));
-        game.player4.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
-        game.player4.addAdventureCard(new Main.Card("F15", 15, "Foe", null));
-        game.player4.addAdventureCard(new Main.Card("F40", 40, "Foe", null));
-        game.player4.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
-        game.player4.addAdventureCard(new Main.Card("D5", 5, "Weapon", null));
-        game.player4.addAdventureCard(new Main.Card("S10", 10, "Weapon", null));
-        game.player4.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player4.addAdventureCard(new Main.Card("H10", 10, "Weapon", null));
-        game.player4.addAdventureCard(new Main.Card("B15", 15, "Weapon", null));
-        game.player4.addAdventureCard(new Main.Card("L20", 20, "Weapon", null));
-        game.player4.addAdventureCard(new Main.Card("E30", 30, "Weapon", null));
+        game.player4.addAdventureCard(new Card("F5", 5, "Foe", null));
+        game.player4.addAdventureCard(new Card("F15", 15, "Foe", null));
+        game.player4.addAdventureCard(new Card("F15", 15, "Foe", null));
+        game.player4.addAdventureCard(new Card("F40", 40, "Foe", null));
+        game.player4.addAdventureCard(new Card("D5", 5, "Weapon", null));
+        game.player4.addAdventureCard(new Card("D5", 5, "Weapon", null));
+        game.player4.addAdventureCard(new Card("S10", 10, "Weapon", null));
+        game.player4.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player4.addAdventureCard(new Card("H10", 10, "Weapon", null));
+        game.player4.addAdventureCard(new Card("B15", 15, "Weapon", null));
+        game.player4.addAdventureCard(new Card("L20", 20, "Weapon", null));
+        game.player4.addAdventureCard(new Card("E30", 30, "Weapon", null));
 
-        game.overwriteEventDeckDraw(0, new Main.Card("Q4", 4, "Quest", null));
+        game.overwriteEventDeckDraw(0, new Card("Q4", 4, "Quest", null));
 
         StringWriter output;
         String input;
@@ -1324,17 +1325,17 @@ class MainATest {
         input = "Y\nY\nY\n";
         game.promptParticipate(new Scanner(input), new PrintWriter(output));
 
-        game.overwriteAdventureDeckDraw(0, new Main.Card("F30", 30, "Foe", null));
-        game.overwriteAdventureDeckDraw(1, new Main.Card("S10", 10, "Weapon", null));
-        game.overwriteAdventureDeckDraw(2, new Main.Card("B15", 15, "Weapon", null));
+        game.overwriteAdventureDeckDraw(0, new Card("F30", 30, "Foe", null));
+        game.overwriteAdventureDeckDraw(1, new Card("S10", 10, "Weapon", null));
+        game.overwriteAdventureDeckDraw(2, new Card("B15", 15, "Weapon", null));
         output = new StringWriter();
         input = "\n\n\n0\n\n0\n\n0\n\n4\n4\nquit\n\n4\n3\nquit\n\n4\n5\nquit\n\n";
         game.beginStage(new Scanner(input), new PrintWriter(output));
 
         game.currentQuest.incrementStageNumber();
-        game.overwriteAdventureDeckDraw(0, new Main.Card("F10", 10, "Foe", null));
-        game.overwriteAdventureDeckDraw(1, new Main.Card("L20", 20, "Weapon", null));
-        game.overwriteAdventureDeckDraw(2, new Main.Card("L20", 20, "Weapon", null));
+        game.overwriteAdventureDeckDraw(0, new Card("F10", 10, "Foe", null));
+        game.overwriteAdventureDeckDraw(1, new Card("L20", 20, "Weapon", null));
+        game.overwriteAdventureDeckDraw(2, new Card("L20", 20, "Weapon", null));
         output = new StringWriter();
         input = "\n\n\n\n\n\n6\n5\nquit\n\n8\n3\nquit\n\n5\n5\nquit\n\n";
         game.beginStage(new Scanner(input), new PrintWriter(output));
@@ -1347,15 +1348,15 @@ class MainATest {
         assertTrue(output.toString().contains("0.F5   1.F10   2.F15   3.F15   4.F30   5.H10   6.B15   7.B15   8.L20"));
 
         game.currentQuest.incrementStageNumber();
-        game.overwriteAdventureDeckDraw(0, new Main.Card("B15", 15, "Weapon", null));
-        game.overwriteAdventureDeckDraw(1, new Main.Card("S10", 10, "Weapon", null));
+        game.overwriteAdventureDeckDraw(0, new Card("B15", 15, "Weapon", null));
+        game.overwriteAdventureDeckDraw(1, new Card("S10", 10, "Weapon", null));
         output = new StringWriter();
         input = "\n\n\n\n8\n6\n4\nquit\n\n6\n4\n6\nquit\n\n";
         game.beginStage(new Scanner(input), new PrintWriter(output));
 
         game.currentQuest.incrementStageNumber();
-        game.overwriteAdventureDeckDraw(0, new Main.Card("F30", 30, "Foe", null));
-        game.overwriteAdventureDeckDraw(1, new Main.Card("L20", 20, "Weapon", null));
+        game.overwriteAdventureDeckDraw(0, new Card("F30", 30, "Foe", null));
+        game.overwriteAdventureDeckDraw(1, new Card("L20", 20, "Weapon", null));
         output = new StringWriter();
         input = "\n\n\n\n6\n5\n5\nquit\n\n3\n3\n3\n4\nquit\n\n";
         game.beginStage(new Scanner(input), new PrintWriter(output));
