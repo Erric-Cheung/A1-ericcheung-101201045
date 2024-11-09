@@ -28,6 +28,10 @@ public class Player {
         return adventureHand.get(index);
     }
 
+    public ArrayList<Card> getAdventureHand(){
+        return adventureHand;
+    }
+
     public void setAdventureHand(ArrayList<Card> hand) {
         adventureHand = hand;
     }

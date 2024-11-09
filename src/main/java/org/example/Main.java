@@ -106,6 +106,9 @@ public class Main {
         return null;
     }
 
+    public Quest getCurrentQuest(){
+        return currentQuest;
+    }
 
     public Card drawEventCard() {
         if (eventDeck.isEmpty()) {
@@ -293,7 +296,7 @@ public class Main {
     public void winnersPrompt(PrintWriter output) {
         ArrayList<String> winnersList = getWinningPlayersId();
         String winners = String.join(", ", winnersList);
-        output.println("WINNERS: " + winners);
+        output.println("Game Winners: " + winners);
         output.flush();
     }
 
@@ -330,6 +333,12 @@ public class Main {
         Player player = getCurrentPlayer();
         for (int i = 0; i < player.getPlayerAdventureHandSize(); i++) {
             output.print(i + "." + player.adventureHand.get(i).name + "   ");
+        }
+    }
+
+    public void displayAdventureHand(PrintWriter output, ArrayList<Card> hand){
+        for (int i = 0; i < hand.size(); i++) {
+            output.print(i + "." + hand.get(i).name + "   ");
         }
     }
 
@@ -579,10 +588,9 @@ public class Main {
         }
     }
 
-    public void beginStage(Scanner input, PrintWriter output) {
+    public void promptParticipantsDraw(Scanner input, PrintWriter output){
         ArrayList<Player> participants = currentQuest.getParticipants();
-        displayParticipants(output);
-        promptWithdraw(input, output);
+
         for (Player player : participants) {
             currentPlayer = player;
             displayCurrentPlayer(output);
@@ -594,14 +602,28 @@ public class Main {
             promptTrimHand(input, output);
             promptFinishTurn(input, output);
         }
-        if (participants.isEmpty()) {
-            return;
-        }
+    }
+
+    public void promptParticipantsAttack(Scanner input, PrintWriter output){
+        ArrayList<Player> participants = currentQuest.getParticipants();
         for (Player player : participants) {
             currentPlayer = player;
             promptBuiltAttack(input, output);
             promptFinishTurn(input, output);
         }
+    }
+    public void beginStage(Scanner input, PrintWriter output) {
+        ArrayList<Player> participants = currentQuest.getParticipants();
+        displayParticipants(output);
+
+        promptWithdraw(input, output);
+        promptParticipantsDraw(input, output);
+
+        if (participants.isEmpty()) {
+            return;
+        }
+
+        promptParticipantsAttack(input, output);
         resolveStageAttack();
     }
 
